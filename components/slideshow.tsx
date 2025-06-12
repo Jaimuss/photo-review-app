@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { Play, Pause, SkipBack, SkipForward, X, Settings } from 'lucide-react'
+import { Play, Pause, SkipBack, SkipForward, X, Settings, Heart, MessageSquare, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Photo {
   id: string
@@ -14,6 +15,7 @@ interface Photo {
   rating: number
   isFavorite: boolean
   colorTag: string | null
+  comments?: string
 }
 
 interface SlideshowProps {
@@ -21,14 +23,17 @@ interface SlideshowProps {
   isOpen: boolean
   onClose: () => void
   startIndex?: number
+  onUpdatePhoto?: (photoId: string, updates: any) => void
 }
 
-export function Slideshow({ photos, isOpen, onClose, startIndex = 0 }: SlideshowProps) {
+export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePhoto }: SlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(startIndex)
   const [isPlaying, setIsPlaying] = useState(false)
   const [speed, setSpeed] = useState(3000) // 3 segundos
   const [transition, setTransition] = useState('fade')
   const [showControls, setShowControls] = useState(true)
+  const [editingComment, setEditingComment] = useState(false)
+  const [tempComment, setTempComment] = useState('')
   const intervalRef = useRef<NodeJS.Timeout>()
   const timeoutRef = useRef<NodeJS.Timeout>()
 
@@ -79,7 +84,62 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0 }: Slideshow
     setShowControls(true)
   }
 
+  const updateRating = (rating: number) => {
+    const currentPhoto = photos[currentIndex]
+    if (onUpdatePhoto) {
+      onUpdatePhoto(currentPhoto.id, { rating })
+      // Update local state for immediate feedback
+      photos[currentIndex].rating = rating
+    }
+  }
+
+  const toggleFavorite = () => {
+    const currentPhoto = photos[currentIndex]
+    if (onUpdatePhoto) {
+      onUpdatePhoto(currentPhoto.id, { isFavorite: !currentPhoto.isFavorite })
+      // Update local state for immediate feedback
+      photos[currentIndex].isFavorite = !currentPhoto.isFavorite
+    }
+  }
+
+  const startEditingComment = () => {
+    const currentPhoto = photos[currentIndex]
+    setTempComment(currentPhoto.comments || '')
+    setEditingComment(true)
+    setIsPlaying(false) // Pausar slideshow mientras se edita
+  }
+
+  const saveComment = () => {
+    const currentPhoto = photos[currentIndex]
+    if (onUpdatePhoto) {
+      onUpdatePhoto(currentPhoto.id, { comments: tempComment })
+      // Update local state for immediate feedback
+      photos[currentIndex].comments = tempComment
+    }
+    setEditingComment(false)
+  }
+
+  const cancelEditingComment = () => {
+    setEditingComment(false)
+    setTempComment('')
+  }
+
   const handleKeyDown = (e: KeyboardEvent) => {
+    // Si estamos editando comentario, manejar solo las teclas específicas
+    if (editingComment) {
+      switch (e.key) {
+        case 'Enter':
+          e.preventDefault()
+          saveComment()
+          break
+        case 'Escape':
+          e.preventDefault()
+          cancelEditingComment()
+          break
+      }
+      return
+    }
+
     switch (e.key) {
       case 'ArrowRight':
       case ' ':
@@ -96,6 +156,29 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0 }: Slideshow
       case 'p':
       case 'P':
         setIsPlaying(!isPlaying)
+        break
+      case '1':
+        updateRating(1)
+        break
+      case '2':
+        updateRating(2)
+        break
+      case '3':
+        updateRating(3)
+        break
+      case '4':
+        updateRating(4)
+        break
+      case '5':
+        updateRating(5)
+        break
+      case 'f':
+      case 'F':
+        toggleFavorite()
+        break
+      case 'c':
+      case 'C':
+        startEditingComment()
         break
     }
   }
@@ -239,50 +322,119 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0 }: Slideshow
           </div>
 
           {/* Información de la foto */}
-          <div className={`absolute top-20 right-6 bg-black/50 text-white p-4 rounded-lg transition-opacity duration-300 ${
+          <div className={`absolute top-20 right-6 bg-black/80 text-white p-4 rounded-lg transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
-          } max-w-xs`}>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Rating:</span>
+          } max-w-sm`}>
+            <div className="space-y-3">
+              {/* Rating interactivo */}
+              <div className="space-y-1">
+                <span className="text-sm font-medium">Rating (1-5):</span>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <div
+                    <button
                       key={star}
-                      className={`w-3 h-3 rounded-full ${
-                        star <= currentPhoto.rating ? 'bg-yellow-400' : 'bg-gray-600'
+                      onClick={() => updateRating(star)}
+                      className={`w-6 h-6 transition-all hover:scale-110 ${
+                        star <= currentPhoto.rating ? 'text-yellow-400' : 'text-gray-500'
                       }`}
-                    />
+                    >
+                      <Star className="w-full h-full fill-current" />
+                    </button>
                   ))}
                 </div>
               </div>
+
+              {/* Favorito interactivo */}
+              <div className="space-y-1">
+                <span className="text-sm font-medium">Favorito (F):</span>
+                <button
+                  onClick={toggleFavorite}
+                  className={`flex items-center gap-2 px-2 py-1 rounded transition-colors ${
+                    currentPhoto.isFavorite 
+                      ? 'bg-red-500/20 text-red-400' 
+                      : 'bg-gray-500/20 text-gray-400 hover:bg-gray-400/20'
+                  }`}
+                >
+                  <Heart className={`w-4 h-4 ${currentPhoto.isFavorite ? 'fill-current' : ''}`} />
+                  <span className="text-sm">
+                    {currentPhoto.isFavorite ? 'Favorita' : 'Marcar favorita'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Comentarios */}
+              <div className="space-y-1">
+                <span className="text-sm font-medium">Comentario (C):</span>
+                {editingComment ? (
+                  <div className="space-y-2">
+                    <Textarea
+                      value={tempComment}
+                      onChange={(e) => setTempComment(e.target.value)}
+                      placeholder="Agregar comentario..."
+                      className="bg-black/50 border-gray-600 text-white text-sm resize-none"
+                      rows={3}
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        onClick={saveComment}
+                        className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1"
+                      >
+                        Guardar (Enter)
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={cancelEditingComment}
+                        className="border-gray-600 text-gray-300 hover:bg-gray-700 text-xs px-2 py-1"
+                      >
+                        Cancelar (Esc)
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={startEditingComment}
+                    className="w-full text-left p-2 rounded bg-gray-500/20 hover:bg-gray-400/20 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4" />
+                      <span className="text-sm">
+                        {currentPhoto.comments || 'Agregar comentario...'}
+                      </span>
+                    </div>
+                  </button>
+                )}
+              </div>
               
+              {/* Etiqueta de color */}
               {currentPhoto.colorTag && (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">Etiqueta:</span>
+                  <span className="text-sm font-medium">Etiqueta:</span>
                   <div 
                     className="w-4 h-4 rounded-full"
                     style={{ backgroundColor: getColorTagColor(currentPhoto.colorTag) }}
                   />
                 </div>
               )}
-              
-              {currentPhoto.isFavorite && (
-                <div className="text-sm text-red-400 flex items-center gap-1">
-                  ❤️ <span>Favorita</span>
-                </div>
-              )}
             </div>
           </div>
 
           {/* Información de teclado */}
-          <div className={`absolute bottom-20 left-6 bg-black/50 text-white p-3 rounded-lg transition-opacity duration-300 text-xs ${
+          <div className={`absolute bottom-20 left-6 bg-black/80 text-white p-3 rounded-lg transition-opacity duration-300 text-xs ${
             showControls ? 'opacity-100' : 'opacity-0'
           }`}>
             <div className="space-y-1">
+              <div className="font-medium mb-2">Controles de teclado:</div>
               <div>← → Navegar</div>
               <div>Espacio: Siguiente</div>
               <div>P: Play/Pause</div>
+              <div className="border-t border-gray-600 pt-2 mt-2">
+                <div>1-5: Rating</div>
+                <div>F: Favorito</div>
+                <div>C: Comentario</div>
+              </div>
               <div>Esc: Salir</div>
             </div>
           </div>

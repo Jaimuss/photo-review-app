@@ -582,11 +582,19 @@ export default function PhotoReviewSession() {
           url: photo.url,
           rating: photo.rating || 3,
           isFavorite: photo.isFavorite || false,
-          colorTag: photo.colorTag
+          colorTag: photo.colorTag,
+          comments: photo.comments
         }))}
         isOpen={showSlideshow}
         onClose={() => setShowSlideshow(false)}
         startIndex={selectedPhoto || 0}
+        onUpdatePhoto={(photoId, updates) => {
+          setPhotos(prev => 
+            prev.map(photo => 
+              photo.id === photoId ? { ...photo, ...updates } : photo
+            )
+          )
+        }}
       />
     </div>
   )
