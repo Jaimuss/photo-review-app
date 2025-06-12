@@ -82,6 +82,13 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
 
   const handleMouseMove = () => {
     setShowControls(true)
+    // Auto-ocultar después de 3 segundos
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
+      setShowControls(false)
+    }, 3000)
   }
 
   const updateRating = (rating: number) => {
@@ -99,6 +106,15 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
       onUpdatePhoto(currentPhoto.id, { isFavorite: !currentPhoto.isFavorite })
       // Update local state for immediate feedback
       photos[currentIndex].isFavorite = !currentPhoto.isFavorite
+    }
+  }
+
+  const setColorTag = (colorTag: string) => {
+    const currentPhoto = photos[currentIndex]
+    if (onUpdatePhoto) {
+      onUpdatePhoto(currentPhoto.id, { colorTag })
+      // Update local state for immediate feedback
+      photos[currentIndex].colorTag = colorTag
     }
   }
 
@@ -180,15 +196,36 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
       case 'C':
         startEditingComment()
         break
+      case 'g':
+      case 'G':
+        setColorTag('green')
+        break
+      case 'y':
+      case 'Y':
+        setColorTag('yellow')
+        break
+      case 'r':
+      case 'R':
+        setColorTag('red')
+        break
+      case 'n':
+      case 'N':
+        setColorTag('') // Sin etiqueta
+        break
     }
   }
 
   useEffect(() => {
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown)
-      return () => window.removeEventListener('keydown', handleKeyDown)
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown)
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current)
+        }
+      }
     }
-  }, [isOpen, isPlaying])
+  }, [isOpen, isPlaying, editingComment, currentIndex])
 
   if (!isOpen || photos.length === 0) return null
 
@@ -321,10 +358,8 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
             </div>
           </div>
 
-          {/* Información de la foto */}
-          <div className={`absolute top-20 right-6 bg-black/80 text-white p-4 rounded-lg transition-opacity duration-300 ${
-            showControls ? 'opacity-100' : 'opacity-0'
-          } max-w-sm`}>
+          {/* Información de la foto - Siempre visible de forma discreta */}
+          <div className="absolute top-6 right-6 bg-black/60 text-white p-3 rounded-lg max-w-sm transition-all duration-300 hover:bg-black/90 hover:scale-105">
             <div className="space-y-3">
               {/* Rating interactivo */}
               <div className="space-y-1">
@@ -408,34 +443,59 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                 )}
               </div>
               
-              {/* Etiqueta de color */}
-              {currentPhoto.colorTag && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">Etiqueta:</span>
-                  <div 
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: getColorTagColor(currentPhoto.colorTag) }}
-                  />
+              {/* Etiquetas de color interactivas */}
+              <div className="space-y-1">
+                <span className="text-sm font-medium">Etiquetas (G/Y/R/N):</span>
+                <div className="flex gap-2">
+                  {[
+                    { key: 'green', color: '#22c55e', label: 'G' },
+                    { key: 'yellow', color: '#eab308', label: 'Y' },
+                    { key: 'red', color: '#ef4444', label: 'R' },
+                    { key: '', color: '#6b7280', label: 'N' }
+                  ].map((tag) => (
+                    <button
+                      key={tag.key}
+                      onClick={() => setColorTag(tag.key)}
+                      className={`w-8 h-8 rounded-full transition-all hover:scale-110 border-2 ${
+                        currentPhoto.colorTag === tag.key 
+                          ? 'border-white shadow-lg' 
+                          : 'border-gray-400 hover:border-white'
+                      }`}
+                      style={{ backgroundColor: tag.color }}
+                      title={`Etiqueta ${tag.label === 'N' ? 'Ninguna' : tag.label}`}
+                    >
+                      <span className="text-white text-xs font-bold">{tag.label}</span>
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
-          {/* Información de teclado */}
-          <div className={`absolute bottom-20 left-6 bg-black/80 text-white p-3 rounded-lg transition-opacity duration-300 text-xs ${
-            showControls ? 'opacity-100' : 'opacity-0'
-          }`}>
+          {/* Información de teclado - Solo aparece con ratón */}
+          <div className={`absolute bottom-6 left-6 bg-black/90 text-white p-4 rounded-lg transition-all duration-300 text-xs ${
+            showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+          } max-w-xs`}>
             <div className="space-y-1">
-              <div className="font-medium mb-2">Controles de teclado:</div>
-              <div>← → Navegar</div>
-              <div>Espacio: Siguiente</div>
-              <div>P: Play/Pause</div>
-              <div className="border-t border-gray-600 pt-2 mt-2">
-                <div>1-5: Rating</div>
-                <div>F: Favorito</div>
-                <div>C: Comentario</div>
+              <div className="font-medium mb-2 text-yellow-400">⌨️ Controles de teclado:</div>
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                <div>← → Navegar</div>
+                <div>Espacio: Siguiente</div>
+                <div>P: Play/Pause</div>
+                <div>Esc: Salir</div>
               </div>
-              <div>Esc: Salir</div>
+              <div className="border-t border-gray-600 pt-2 mt-2">
+                <div className="text-green-400 font-medium mb-1">🎯 Edición rápida:</div>
+                <div className="grid grid-cols-2 gap-1">
+                  <div>1-5: Rating</div>
+                  <div>F: Favorito</div>
+                  <div>C: Comentario</div>
+                  <div>G: Verde</div>
+                  <div>Y: Amarillo</div>
+                  <div>R: Rojo</div>
+                  <div>N: Sin color</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
