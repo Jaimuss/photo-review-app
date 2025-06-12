@@ -1,0 +1,2 @@
+# This file ensures the uploads directory is tracked in Git
+# Photos uploaded by users will go here but won't be committed to Git 
