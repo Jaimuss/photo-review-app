@@ -55,6 +55,20 @@ export class DatabaseService {
     }
   }
 
+  async getNextUploadOrder(sessionId: string): Promise<number> {
+    const result = await db
+      .select({ maxOrder: photos.uploadOrder })
+      .from(photos)
+      .where(eq(photos.sessionId, sessionId))
+      .orderBy(photos.uploadOrder)
+
+    const maxOrder = result.reduce((max, photo) => 
+      Math.max(max, photo.maxOrder || 0), 0
+    )
+    
+    return maxOrder + 1
+  }
+
   async createPhoto(data: {
     id: string
     sessionId: string
