@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useToast } from "@/components/ui/use-toast"
 import { ModeToggle } from "@/components/mode-toggle"
 
 // Types
@@ -42,6 +43,7 @@ const colorTags = [
 
 export default function PhotoReviewSession() {
   const router = useRouter()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [accessCode, setAccessCode] = useState("")
   const [error, setError] = useState("")
@@ -82,8 +84,39 @@ export default function PhotoReviewSession() {
 
   const handlePhotographerLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    // En una implementación real, aquí iría la lógica de login
-    router.push("/dashboard")
+    setIsLoading(true)
+
+    try {
+      const formData = new FormData(e.target as HTMLFormElement)
+      const email = formData.get('email') as string
+      const password = formData.get('password') as string
+
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (response.ok) {
+        // Usar window.location para forzar la redirección
+        window.location.href = '/dashboard'
+      } else {
+        const error = await response.json()
+        toast({
+          title: 'Error de login',
+          description: error.error,
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Error al iniciar sesión',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // Simular carga de datos del backend
@@ -375,14 +408,28 @@ export default function PhotoReviewSession() {
                   <form onSubmit={handlePhotographerLogin} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="tu@email.com" />
+                      <Input 
+                        id="email" 
+                        name="email"
+                        type="email" 
+                        placeholder="tu@email.com" 
+                        defaultValue="demo@example.com" 
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="password">Contraseña</Label>
-                      <Input id="password" type="password" />
+                      <Input 
+                        id="password" 
+                        name="password"
+                        type="password" 
+                        defaultValue="password" 
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Demo: demo@example.com / password
+                      </p>
                     </div>
-                    <Button type="submit" className="w-full">
-                      Iniciar Sesión
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                     </Button>
 
                     <div className="flex justify-between items-center pt-4">

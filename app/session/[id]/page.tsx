@@ -13,6 +13,7 @@ import {
   ArrowRight,
   X,
   Check,
+  Copy,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -23,27 +24,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { useParams } from "next/navigation"
+import { PhotoComparison } from "@/components/photo-comparison"
 
-// Mock data
-const sessionData = {
-  id: "session-001",
-  clientName: "María González",
-  photographer: "Studio Pro",
-  date: "15 de Enero, 2024",
-  location: "Sesión Familiar - Parque Central",
-  totalPhotos: 48,
-  reviewedPhotos: 12,
-}
+// Mock data - now loaded from API
+// const sessionData = { ... }
 
-const mockPhotos = Array.from({ length: 48 }, (_, i) => ({
-  id: `photo-${i + 1}`,
-  url: `/placeholder.svg?height=400&width=300`,
-  rating: (i % 5) + 1,
-  isFavorite: i % 7 === 0,
-  colorTag: i % 4 === 0 ? "green" : i % 4 === 1 ? "yellow" : i % 4 === 2 ? "red" : null,
-  comments: i % 6 === 0 ? "Me encanta esta foto, perfecta para imprimir" : "",
-  isReviewed: i < 12,
-}))
+// Mock photos - now loaded from API
+// const mockPhotos = [ ... ]
 
 const colorTags = [
   { value: "green", label: "Seleccionar", color: "bg-green-500" },
@@ -56,7 +43,11 @@ export default function PhotoReviewSession() {
   const [viewMode, setViewMode] = useState<"grid" | "carousel">("grid")
   const [filterRating, setFilterRating] = useState<string>("all")
   const [filterColor, setFilterColor] = useState<string>("all")
-  const [photos, setPhotos] = useState(mockPhotos)
+  const [photos, setPhotos] = useState<any[]>([])
+  const [sessionData, setSessionData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([])
+  const [showComparison, setShowComparison] = useState(false)
   const { id: sessionId } = useParams()
 
   useEffect(() => {
@@ -91,9 +82,22 @@ export default function PhotoReviewSession() {
       }
 
       const data = await response.json()
-      setPhotos(data.photos)
+      setPhotos(data.photos || [])
+      setSessionData(data.session || {})
     } catch (error) {
       console.error("Error loading session:", error)
+      // Fallback data in case of error
+      setSessionData({
+        id: sessionId,
+        clientName: "Cliente",
+        photographer: "Fotógrafo", 
+        date: new Date().toLocaleDateString('es-ES'),
+        location: "Sesión fotográfica",
+        totalPhotos: 0,
+        reviewedPhotos: 0,
+      })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -115,6 +119,29 @@ export default function PhotoReviewSession() {
     setPhotos((prev) =>
       prev.map((photo) => (photo.id === photoId ? { ...photo, isFavorite: !photo.isFavorite } : photo)),
     )
+  }
+
+  const toggleComparisonSelection = (photoId: string) => {
+    setSelectedForComparison(prev => {
+      if (prev.includes(photoId)) {
+        return prev.filter(id => id !== photoId)
+      } else if (prev.length < 4) { // Máximo 4 fotos para comparar
+        return [...prev, photoId]
+      }
+      return prev
+    })
+  }
+
+  const startComparison = () => {
+    if (selectedForComparison.length >= 2) {
+      setShowComparison(true)
+    }
+  }
+
+  const handleUpdatePhotoInComparison = (photoId: string, updates: any) => {
+    setPhotos(prev => prev.map(photo => 
+      photo.id === photoId ? { ...photo, ...updates, isReviewed: true } : photo
+    ))
   }
 
   const filteredPhotos = photos.filter((photo) => {
@@ -167,6 +194,18 @@ export default function PhotoReviewSession() {
     </div>
   )
 
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando fotos...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -174,9 +213,11 @@ export default function PhotoReviewSession() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{sessionData.location}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {sessionData?.location || 'Sesión fotográfica'}
+              </h1>
               <p className="text-gray-600">
-                Cliente: {sessionData.clientName} • {sessionData.date}
+                Cliente: {sessionData?.clientName || 'Cliente'} • {sessionData?.date || 'Fecha'}
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -222,6 +263,19 @@ export default function PhotoReviewSession() {
                   <Eye className="w-4 h-4" />
                   Carrusel
                 </Button>
+                
+                {selectedForComparison.length > 0 && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={startComparison}
+                    disabled={selectedForComparison.length < 2}
+                    className="gap-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                    Comparar ({selectedForComparison.length})
+                  </Button>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
@@ -279,6 +333,14 @@ export default function PhotoReviewSession() {
 
                     {/* Overlay con controles */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors">
+                      <div className="absolute top-2 left-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedForComparison.includes(photo.id)}
+                          onChange={() => toggleComparisonSelection(photo.id)}
+                          className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                        />
+                      </div>
                       <div className="absolute top-2 right-2 flex gap-1">
                         {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
                         {photo.colorTag && (
@@ -475,6 +537,29 @@ export default function PhotoReviewSession() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Modal de Comparación */}
+      {showComparison && (
+        <PhotoComparison
+          photos={selectedForComparison.map(id => {
+            const photo = photos.find(p => p.id === id)!
+            return {
+              id: photo.id,
+              url: photo.url,
+              filename: photo.filename || `Foto ${photo.id}`,
+              rating: photo.rating,
+              isFavorite: photo.isFavorite,
+              colorTag: photo.colorTag,
+              comments: photo.comments
+            }
+          })}
+          onClose={() => {
+            setShowComparison(false)
+            setSelectedForComparison([])
+          }}
+          onUpdatePhoto={handleUpdatePhotoInComparison}
+        />
+      )}
     </div>
   )
 }

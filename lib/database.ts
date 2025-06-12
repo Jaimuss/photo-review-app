@@ -106,6 +106,15 @@ export class DatabaseService {
     }
   }
 
+  async updatePhotoUrls(photoId: string, originalUrl: string, thumbnailUrl: string) {
+    await db.update(photos)
+      .set({ 
+        originalUrl,
+        thumbnailUrl
+      })
+      .where(eq(photos.id, photoId))
+  }
+
 }
 
 export const database = new DatabaseService()
