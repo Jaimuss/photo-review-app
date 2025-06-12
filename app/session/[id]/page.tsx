@@ -14,6 +14,7 @@ import {
   X,
   Check,
   Copy,
+  Play,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -25,6 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress"
 import { useParams } from "next/navigation"
 import { PhotoComparison } from "@/components/photo-comparison"
+import { Slideshow } from "@/components/slideshow"
 
 // Mock data - now loaded from API
 // const sessionData = { ... }
@@ -48,6 +50,7 @@ export default function PhotoReviewSession() {
   const [loading, setLoading] = useState(true)
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([])
   const [showComparison, setShowComparison] = useState(false)
+  const [showSlideshow, setShowSlideshow] = useState(false)
   const { id: sessionId } = useParams()
 
   useEffect(() => {
@@ -276,6 +279,17 @@ export default function PhotoReviewSession() {
                     Comparar ({selectedForComparison.length})
                   </Button>
                 )}
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowSlideshow(true)}
+                  disabled={filteredPhotos.length === 0}
+                  className="gap-2"
+                >
+                  <Play className="w-4 h-4" />
+                  Slideshow
+                </Button>
               </div>
 
               <div className="flex items-center gap-2">
@@ -560,6 +574,20 @@ export default function PhotoReviewSession() {
           onUpdatePhoto={handleUpdatePhotoInComparison}
         />
       )}
+
+      {/* Modal de Slideshow */}
+      <Slideshow
+        photos={filteredPhotos.map(photo => ({
+          id: photo.id,
+          url: photo.url,
+          rating: photo.rating || 3,
+          isFavorite: photo.isFavorite || false,
+          colorTag: photo.colorTag
+        }))}
+        isOpen={showSlideshow}
+        onClose={() => setShowSlideshow(false)}
+        startIndex={selectedPhoto || 0}
+      />
     </div>
   )
 }
