@@ -65,6 +65,7 @@ export default function PhotoReviewSession() {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [dragEnd, setDragEnd] = useState({ x: 0, y: 0 })
   const [dragStartPhotos, setDragStartPhotos] = useState<string[]>([])
+  const [isCtrlHeld, setIsCtrlHeld] = useState(false)
   
   const { id: sessionId } = useParams()
 
@@ -269,6 +270,7 @@ export default function PhotoReviewSession() {
     setIsDragging(true)
     setDragStart({ x: startX, y: startY })
     setDragEnd({ x: startX, y: startY })
+    setIsCtrlHeld(e.ctrlKey) // Guardar estado del Ctrl
     
     // Guardar selección actual para poder mantenerla con Ctrl
     if (e.ctrlKey) {
@@ -323,8 +325,8 @@ export default function PhotoReviewSession() {
       }
     })
 
-    // Combinar con selección inicial si se mantiene Ctrl
-    const finalSelection = e.ctrlKey 
+    // Combinar con selección inicial si se mantuvo Ctrl al inicio
+    const finalSelection = isCtrlHeld 
       ? [...dragStartPhotos, ...photosInSelection]
       : photosInSelection
 
@@ -335,6 +337,7 @@ export default function PhotoReviewSession() {
     if (!isDragging) return
 
     setIsDragging(false)
+    setIsCtrlHeld(false) // Limpiar estado del Ctrl
     // La selección final ya está establecida en handleMouseMove
   }
 
