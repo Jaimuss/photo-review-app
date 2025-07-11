@@ -27,6 +27,7 @@ import { Progress } from "@/components/ui/progress"
 import { useParams } from "next/navigation"
 import { PhotoComparison } from "@/components/photo-comparison"
 import { Slideshow } from "@/components/slideshow"
+import { ExportDialog } from "@/components/export-dialog"
 
 // Mock data - now loaded from API
 // const sessionData = { ... }
@@ -51,6 +52,7 @@ export default function PhotoReviewSession() {
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([])
   const [showComparison, setShowComparison] = useState(false)
   const [showSlideshow, setShowSlideshow] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
   const { id: sessionId } = useParams()
 
   useEffect(() => {
@@ -161,7 +163,7 @@ export default function PhotoReviewSession() {
     onRatingChange,
     size = "w-5 h-5",
   }: { rating: number; onRatingChange?: (rating: number) => void; size?: string }) => (
-    <div className="flex gap-1">
+    <div className="flex gap-1 items-center">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
@@ -171,6 +173,13 @@ export default function PhotoReviewSession() {
           onClick={() => onRatingChange?.(star)}
         />
       ))}
+      <button
+        onClick={() => onRatingChange?.(0)}
+        className={`${size} cursor-pointer transition-colors text-red-400 ml-2`}
+        title="Quitar rating"
+      >
+        <X className={size} />
+      </button>
     </div>
   )
 
@@ -290,6 +299,16 @@ export default function PhotoReviewSession() {
                   <Play className="w-4 h-4" />
                   Slideshow
                 </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowExportDialog(true)}
+                  className="gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Exportar Excel
+                </Button>
               </div>
 
               <div className="flex items-center gap-2">
@@ -305,6 +324,7 @@ export default function PhotoReviewSession() {
                     <SelectItem value="3">3 estrellas</SelectItem>
                     <SelectItem value="2">2 estrellas</SelectItem>
                     <SelectItem value="1">1 estrella</SelectItem>
+                    <SelectItem value="0">0 estrellas</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -336,13 +356,18 @@ export default function PhotoReviewSession() {
             {filteredPhotos.map((photo, index) => (
               <Card key={photo.id} className="group overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-0 relative">
-                  <div className="aspect-[3/4] relative">
+                  <div className="relative">
                     <Image
                       src={photo.url || "/placeholder.svg"}
                       alt={`Foto ${index + 1}`}
-                      fill
-                      className="object-cover cursor-pointer"
+                      width={300}
+                      height={400}
+                      className="w-full h-auto object-contain cursor-pointer"
                       onClick={() => setSelectedPhoto(index)}
+                      onDoubleClick={() => {
+                        setSelectedPhoto(index);
+                        setShowSlideshow(true);
+                      }}
                     />
 
                     {/* Overlay con controles */}
@@ -397,12 +422,17 @@ export default function PhotoReviewSession() {
               <Card key={photo.id} className="overflow-hidden">
                 <CardContent className="p-6">
                   <div className="grid lg:grid-cols-2 gap-6">
-                    <div className="aspect-[3/4] relative">
+                    <div className="relative">
                       <Image
                         src={photo.url || "/placeholder.svg"}
                         alt={`Foto ${index + 1}`}
-                        fill
-                        className="object-cover rounded-lg"
+                        width={400}
+                        height={600}
+                        className="w-full h-auto object-contain rounded-lg cursor-pointer"
+                        onDoubleClick={() => {
+                          setSelectedPhoto(index);
+                          setShowSlideshow(true);
+                        }}
                       />
                     </div>
 
@@ -580,7 +610,7 @@ export default function PhotoReviewSession() {
         photos={filteredPhotos.map(photo => ({
           id: photo.id,
           url: photo.url,
-          rating: photo.rating || 3,
+          rating: photo.rating || 0, // Rating base 0 estrellas
           isFavorite: photo.isFavorite || false,
           colorTag: photo.colorTag,
           comments: photo.comments
@@ -595,6 +625,28 @@ export default function PhotoReviewSession() {
             )
           )
         }}
+      />
+
+      {/* Diálogo de Exportación */}
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        session={{
+          id: sessionData?.id || '',
+          clientName: sessionData?.clientName || '',
+          photographer: sessionData?.photographer || '',
+          date: sessionData?.date || '',
+          location: sessionData?.location || ''
+        }}
+        photos={photos.map(photo => ({
+          id: photo.id,
+          filename: photo.filename,
+          rating: photo.rating,
+          isFavorite: photo.isFavorite,
+          colorTag: photo.colorTag,
+          comments: photo.comments,
+          isReviewed: photo.isReviewed
+        }))}
       />
     </div>
   )

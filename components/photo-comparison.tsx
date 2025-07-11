@@ -206,7 +206,7 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
               </div>
 
               {/* Rating */}
-              <div className="absolute bottom-2 left-2 flex gap-1">
+              <div className="absolute bottom-2 left-2 flex gap-1 items-center">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
@@ -222,6 +222,13 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
                     />
                   </button>
                 ))}
+                <button
+                  onClick={() => handleRating(photo.id, 0)}
+                  className="transition-colors text-red-400 ml-1"
+                  title="Quitar rating"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
 
               {/* Botón para seleccionar foto para editar */}
@@ -288,7 +295,7 @@ function PhotoEditPanel({
         <div>
           <Label className="text-white text-sm">Calificación</Label>
           <div className="flex gap-1 mt-1">
-            {[1, 2, 3, 4, 5].map((star) => (
+            {[0, 1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 onClick={() => onUpdate({ rating: star })}

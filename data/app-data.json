@@ -1,0 +1,1770 @@
+{
+  "sessions": {
+    "session-001": {
+      "id": "session-001",
+      "photographerId": "demo-photographer",
+      "clientName": "María González",
+      "location": "Sesión Familiar - Parque Central",
+      "sessionDate": "2024-01-15",
+      "accessToken": "demo-token-123",
+      "status": "active",
+      "createdAt": 1752228065718
+    },
+    "session-1752228283162": {
+      "id": "session-1752228283162",
+      "photographerId": "demo-photographer",
+      "clientName": "Alba Cavero",
+      "location": "Alba Cavero",
+      "sessionDate": "2025-07-01",
+      "accessToken": "alba-cavero-1752228283162",
+      "status": "active",
+      "createdAt": 1752228283162
+    },
+    "session-1752228546456": {
+      "id": "session-1752228546456",
+      "photographerId": "demo-photographer",
+      "clientName": "YUXUS",
+      "location": "Sorgo 53",
+      "sessionDate": "2025-07-10",
+      "accessToken": "yuxus-1752228546456",
+      "status": "active",
+      "createdAt": 1752228546457
+    }
+  },
+  "photos": {
+    "photo-1": {
+      "id": "photo-1",
+      "sessionId": "session-001",
+      "filename": "IMG_0001.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto1",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb1",
+      "uploadOrder": 1,
+      "createdAt": 1752228065718
+    },
+    "photo-2": {
+      "id": "photo-2",
+      "sessionId": "session-001",
+      "filename": "IMG_0002.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto2",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb2",
+      "uploadOrder": 2,
+      "createdAt": 1752228065718
+    },
+    "photo-3": {
+      "id": "photo-3",
+      "sessionId": "session-001",
+      "filename": "IMG_0003.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto3",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb3",
+      "uploadOrder": 3,
+      "createdAt": 1752228065718
+    },
+    "photo-4": {
+      "id": "photo-4",
+      "sessionId": "session-001",
+      "filename": "IMG_0004.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto4",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb4",
+      "uploadOrder": 4,
+      "createdAt": 1752228065718
+    },
+    "photo-5": {
+      "id": "photo-5",
+      "sessionId": "session-001",
+      "filename": "IMG_0005.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto5",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb5",
+      "uploadOrder": 5,
+      "createdAt": 1752228065718
+    },
+    "photo-6": {
+      "id": "photo-6",
+      "sessionId": "session-001",
+      "filename": "IMG_0006.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto6",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb6",
+      "uploadOrder": 6,
+      "createdAt": 1752228065718
+    },
+    "photo-7": {
+      "id": "photo-7",
+      "sessionId": "session-001",
+      "filename": "IMG_0007.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto7",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb7",
+      "uploadOrder": 7,
+      "createdAt": 1752228065718
+    },
+    "photo-8": {
+      "id": "photo-8",
+      "sessionId": "session-001",
+      "filename": "IMG_0008.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto8",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb8",
+      "uploadOrder": 8,
+      "createdAt": 1752228065718
+    },
+    "photo-9": {
+      "id": "photo-9",
+      "sessionId": "session-001",
+      "filename": "IMG_0009.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto9",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb9",
+      "uploadOrder": 9,
+      "createdAt": 1752228065718
+    },
+    "photo-10": {
+      "id": "photo-10",
+      "sessionId": "session-001",
+      "filename": "IMG_0010.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto10",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb10",
+      "uploadOrder": 10,
+      "createdAt": 1752228065718
+    },
+    "photo-11": {
+      "id": "photo-11",
+      "sessionId": "session-001",
+      "filename": "IMG_0011.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto11",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb11",
+      "uploadOrder": 11,
+      "createdAt": 1752228065718
+    },
+    "photo-12": {
+      "id": "photo-12",
+      "sessionId": "session-001",
+      "filename": "IMG_0012.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto12",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb12",
+      "uploadOrder": 12,
+      "createdAt": 1752228065718
+    },
+    "photo-13": {
+      "id": "photo-13",
+      "sessionId": "session-001",
+      "filename": "IMG_0013.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto13",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb13",
+      "uploadOrder": 13,
+      "createdAt": 1752228065718
+    },
+    "photo-14": {
+      "id": "photo-14",
+      "sessionId": "session-001",
+      "filename": "IMG_0014.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto14",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb14",
+      "uploadOrder": 14,
+      "createdAt": 1752228065718
+    },
+    "photo-15": {
+      "id": "photo-15",
+      "sessionId": "session-001",
+      "filename": "IMG_0015.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto15",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb15",
+      "uploadOrder": 15,
+      "createdAt": 1752228065718
+    },
+    "photo-16": {
+      "id": "photo-16",
+      "sessionId": "session-001",
+      "filename": "IMG_0016.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto16",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb16",
+      "uploadOrder": 16,
+      "createdAt": 1752228065718
+    },
+    "photo-17": {
+      "id": "photo-17",
+      "sessionId": "session-001",
+      "filename": "IMG_0017.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto17",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb17",
+      "uploadOrder": 17,
+      "createdAt": 1752228065718
+    },
+    "photo-18": {
+      "id": "photo-18",
+      "sessionId": "session-001",
+      "filename": "IMG_0018.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto18",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb18",
+      "uploadOrder": 18,
+      "createdAt": 1752228065718
+    },
+    "photo-19": {
+      "id": "photo-19",
+      "sessionId": "session-001",
+      "filename": "IMG_0019.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto19",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb19",
+      "uploadOrder": 19,
+      "createdAt": 1752228065718
+    },
+    "photo-20": {
+      "id": "photo-20",
+      "sessionId": "session-001",
+      "filename": "IMG_0020.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto20",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb20",
+      "uploadOrder": 20,
+      "createdAt": 1752228065718
+    },
+    "photo-21": {
+      "id": "photo-21",
+      "sessionId": "session-001",
+      "filename": "IMG_0021.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto21",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb21",
+      "uploadOrder": 21,
+      "createdAt": 1752228065718
+    },
+    "photo-22": {
+      "id": "photo-22",
+      "sessionId": "session-001",
+      "filename": "IMG_0022.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto22",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb22",
+      "uploadOrder": 22,
+      "createdAt": 1752228065718
+    },
+    "photo-23": {
+      "id": "photo-23",
+      "sessionId": "session-001",
+      "filename": "IMG_0023.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto23",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb23",
+      "uploadOrder": 23,
+      "createdAt": 1752228065718
+    },
+    "photo-24": {
+      "id": "photo-24",
+      "sessionId": "session-001",
+      "filename": "IMG_0024.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto24",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb24",
+      "uploadOrder": 24,
+      "createdAt": 1752228065718
+    },
+    "photo-25": {
+      "id": "photo-25",
+      "sessionId": "session-001",
+      "filename": "IMG_0025.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto25",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb25",
+      "uploadOrder": 25,
+      "createdAt": 1752228065718
+    },
+    "photo-26": {
+      "id": "photo-26",
+      "sessionId": "session-001",
+      "filename": "IMG_0026.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto26",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb26",
+      "uploadOrder": 26,
+      "createdAt": 1752228065718
+    },
+    "photo-27": {
+      "id": "photo-27",
+      "sessionId": "session-001",
+      "filename": "IMG_0027.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto27",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb27",
+      "uploadOrder": 27,
+      "createdAt": 1752228065718
+    },
+    "photo-28": {
+      "id": "photo-28",
+      "sessionId": "session-001",
+      "filename": "IMG_0028.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto28",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb28",
+      "uploadOrder": 28,
+      "createdAt": 1752228065718
+    },
+    "photo-29": {
+      "id": "photo-29",
+      "sessionId": "session-001",
+      "filename": "IMG_0029.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto29",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb29",
+      "uploadOrder": 29,
+      "createdAt": 1752228065718
+    },
+    "photo-30": {
+      "id": "photo-30",
+      "sessionId": "session-001",
+      "filename": "IMG_0030.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto30",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb30",
+      "uploadOrder": 30,
+      "createdAt": 1752228065718
+    },
+    "photo-31": {
+      "id": "photo-31",
+      "sessionId": "session-001",
+      "filename": "IMG_0031.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto31",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb31",
+      "uploadOrder": 31,
+      "createdAt": 1752228065718
+    },
+    "photo-32": {
+      "id": "photo-32",
+      "sessionId": "session-001",
+      "filename": "IMG_0032.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto32",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb32",
+      "uploadOrder": 32,
+      "createdAt": 1752228065718
+    },
+    "photo-33": {
+      "id": "photo-33",
+      "sessionId": "session-001",
+      "filename": "IMG_0033.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto33",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb33",
+      "uploadOrder": 33,
+      "createdAt": 1752228065718
+    },
+    "photo-34": {
+      "id": "photo-34",
+      "sessionId": "session-001",
+      "filename": "IMG_0034.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto34",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb34",
+      "uploadOrder": 34,
+      "createdAt": 1752228065718
+    },
+    "photo-35": {
+      "id": "photo-35",
+      "sessionId": "session-001",
+      "filename": "IMG_0035.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto35",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb35",
+      "uploadOrder": 35,
+      "createdAt": 1752228065718
+    },
+    "photo-36": {
+      "id": "photo-36",
+      "sessionId": "session-001",
+      "filename": "IMG_0036.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto36",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb36",
+      "uploadOrder": 36,
+      "createdAt": 1752228065718
+    },
+    "photo-37": {
+      "id": "photo-37",
+      "sessionId": "session-001",
+      "filename": "IMG_0037.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto37",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb37",
+      "uploadOrder": 37,
+      "createdAt": 1752228065718
+    },
+    "photo-38": {
+      "id": "photo-38",
+      "sessionId": "session-001",
+      "filename": "IMG_0038.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto38",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb38",
+      "uploadOrder": 38,
+      "createdAt": 1752228065718
+    },
+    "photo-39": {
+      "id": "photo-39",
+      "sessionId": "session-001",
+      "filename": "IMG_0039.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto39",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb39",
+      "uploadOrder": 39,
+      "createdAt": 1752228065718
+    },
+    "photo-40": {
+      "id": "photo-40",
+      "sessionId": "session-001",
+      "filename": "IMG_0040.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto40",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb40",
+      "uploadOrder": 40,
+      "createdAt": 1752228065718
+    },
+    "photo-41": {
+      "id": "photo-41",
+      "sessionId": "session-001",
+      "filename": "IMG_0041.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto41",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb41",
+      "uploadOrder": 41,
+      "createdAt": 1752228065718
+    },
+    "photo-42": {
+      "id": "photo-42",
+      "sessionId": "session-001",
+      "filename": "IMG_0042.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto42",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb42",
+      "uploadOrder": 42,
+      "createdAt": 1752228065718
+    },
+    "photo-43": {
+      "id": "photo-43",
+      "sessionId": "session-001",
+      "filename": "IMG_0043.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto43",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb43",
+      "uploadOrder": 43,
+      "createdAt": 1752228065718
+    },
+    "photo-44": {
+      "id": "photo-44",
+      "sessionId": "session-001",
+      "filename": "IMG_0044.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto44",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb44",
+      "uploadOrder": 44,
+      "createdAt": 1752228065718
+    },
+    "photo-45": {
+      "id": "photo-45",
+      "sessionId": "session-001",
+      "filename": "IMG_0045.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto45",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb45",
+      "uploadOrder": 45,
+      "createdAt": 1752228065718
+    },
+    "photo-46": {
+      "id": "photo-46",
+      "sessionId": "session-001",
+      "filename": "IMG_0046.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto46",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb46",
+      "uploadOrder": 46,
+      "createdAt": 1752228065718
+    },
+    "photo-47": {
+      "id": "photo-47",
+      "sessionId": "session-001",
+      "filename": "IMG_0047.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto47",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb47",
+      "uploadOrder": 47,
+      "createdAt": 1752228065718
+    },
+    "photo-48": {
+      "id": "photo-48",
+      "sessionId": "session-001",
+      "filename": "IMG_0048.jpg",
+      "originalUrl": "/placeholder.svg?height=400&width=300&text=Foto48",
+      "thumbnailUrl": "/placeholder.svg?height=200&width=150&text=Thumb48",
+      "uploadOrder": 48,
+      "createdAt": 1752228065718
+    },
+    "photo-session-001-1752228191857-0": {
+      "id": "photo-session-001-1752228191857-0",
+      "sessionId": "session-001",
+      "filename": "1749556313043-280325_ALBA_CAVERO 00516.jpg",
+      "originalUrl": "/uploads/session-001/1752228191857_0_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228191857_0_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "uploadOrder": 49,
+      "createdAt": 1752228192044
+    },
+    "photo-session-001-1752228208075-0": {
+      "id": "photo-session-001-1752228208075-0",
+      "sessionId": "session-001",
+      "filename": "1749556308677-2025_03_27 yuxus02074.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_0_1749556308677-2025_03_27_yuxus02074.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_0_1749556308677-2025_03_27_yuxus02074.jpg",
+      "uploadOrder": 50,
+      "createdAt": 1752228208158
+    },
+    "photo-session-001-1752228208075-1": {
+      "id": "photo-session-001-1752228208075-1",
+      "sessionId": "session-001",
+      "filename": "1749556308992-280325_ALBA_CAVERO 00012.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_1_1749556308992-280325_ALBA_CAVERO_00012.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_1_1749556308992-280325_ALBA_CAVERO_00012.jpg",
+      "uploadOrder": 51,
+      "createdAt": 1752228208442
+    },
+    "photo-session-001-1752228208075-2": {
+      "id": "photo-session-001-1752228208075-2",
+      "sessionId": "session-001",
+      "filename": "1749556309211-280325_ALBA_CAVERO 00013.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_2_1749556309211-280325_ALBA_CAVERO_00013.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_2_1749556309211-280325_ALBA_CAVERO_00013.jpg",
+      "uploadOrder": 52,
+      "createdAt": 1752228208567
+    },
+    "photo-session-001-1752228208075-3": {
+      "id": "photo-session-001-1752228208075-3",
+      "sessionId": "session-001",
+      "filename": "1749556309300-280325_ALBA_CAVERO 00058.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_3_1749556309300-280325_ALBA_CAVERO_00058.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_3_1749556309300-280325_ALBA_CAVERO_00058.jpg",
+      "uploadOrder": 53,
+      "createdAt": 1752228208758
+    },
+    "photo-session-001-1752228208075-4": {
+      "id": "photo-session-001-1752228208075-4",
+      "sessionId": "session-001",
+      "filename": "1749556309643-280325_ALBA_CAVERO 00068.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_4_1749556309643-280325_ALBA_CAVERO_00068.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_4_1749556309643-280325_ALBA_CAVERO_00068.jpg",
+      "uploadOrder": 54,
+      "createdAt": 1752228208899
+    },
+    "photo-session-001-1752228208075-5": {
+      "id": "photo-session-001-1752228208075-5",
+      "sessionId": "session-001",
+      "filename": "1749556309764-280325_ALBA_CAVERO 00071.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_5_1749556309764-280325_ALBA_CAVERO_00071.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_5_1749556309764-280325_ALBA_CAVERO_00071.jpg",
+      "uploadOrder": 55,
+      "createdAt": 1752228209012
+    },
+    "photo-session-001-1752228208075-6": {
+      "id": "photo-session-001-1752228208075-6",
+      "sessionId": "session-001",
+      "filename": "1749556310351-280325_ALBA_CAVERO 00124.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_6_1749556310351-280325_ALBA_CAVERO_00124.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_6_1749556310351-280325_ALBA_CAVERO_00124.jpg",
+      "uploadOrder": 56,
+      "createdAt": 1752228209313
+    },
+    "photo-session-001-1752228208075-7": {
+      "id": "photo-session-001-1752228208075-7",
+      "sessionId": "session-001",
+      "filename": "1749556310513-280325_ALBA_CAVERO 00137.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_7_1749556310513-280325_ALBA_CAVERO_00137.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_7_1749556310513-280325_ALBA_CAVERO_00137.jpg",
+      "uploadOrder": 57,
+      "createdAt": 1752228209429
+    },
+    "photo-session-001-1752228208075-8": {
+      "id": "photo-session-001-1752228208075-8",
+      "sessionId": "session-001",
+      "filename": "1749556310973-280325_ALBA_CAVERO 00318.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_8_1749556310973-280325_ALBA_CAVERO_00318.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_8_1749556310973-280325_ALBA_CAVERO_00318.jpg",
+      "uploadOrder": 58,
+      "createdAt": 1752228209763
+    },
+    "photo-session-001-1752228208075-9": {
+      "id": "photo-session-001-1752228208075-9",
+      "sessionId": "session-001",
+      "filename": "1749556311065-280325_ALBA_CAVERO 00349.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_9_1749556311065-280325_ALBA_CAVERO_00349.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_9_1749556311065-280325_ALBA_CAVERO_00349.jpg",
+      "uploadOrder": 59,
+      "createdAt": 1752228209888
+    },
+    "photo-session-001-1752228208075-10": {
+      "id": "photo-session-001-1752228208075-10",
+      "sessionId": "session-001",
+      "filename": "1749556311500-280325_ALBA_CAVERO 00399.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_10_1749556311500-280325_ALBA_CAVERO_00399.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_10_1749556311500-280325_ALBA_CAVERO_00399.jpg",
+      "uploadOrder": 60,
+      "createdAt": 1752228210231
+    },
+    "photo-session-001-1752228208075-11": {
+      "id": "photo-session-001-1752228208075-11",
+      "sessionId": "session-001",
+      "filename": "1749556311571-280325_ALBA_CAVERO 00430.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_11_1749556311571-280325_ALBA_CAVERO_00430.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_11_1749556311571-280325_ALBA_CAVERO_00430.jpg",
+      "uploadOrder": 61,
+      "createdAt": 1752228210549
+    },
+    "photo-session-001-1752228208075-12": {
+      "id": "photo-session-001-1752228208075-12",
+      "sessionId": "session-001",
+      "filename": "1749556311793-280325_ALBA_CAVERO 00435.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_12_1749556311793-280325_ALBA_CAVERO_00435.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_12_1749556311793-280325_ALBA_CAVERO_00435.jpg",
+      "uploadOrder": 62,
+      "createdAt": 1752228210733
+    },
+    "photo-session-001-1752228208075-13": {
+      "id": "photo-session-001-1752228208075-13",
+      "sessionId": "session-001",
+      "filename": "1749556311862-280325_ALBA_CAVERO 00438.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_13_1749556311862-280325_ALBA_CAVERO_00438.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_13_1749556311862-280325_ALBA_CAVERO_00438.jpg",
+      "uploadOrder": 63,
+      "createdAt": 1752228211008
+    },
+    "photo-session-001-1752228208075-14": {
+      "id": "photo-session-001-1752228208075-14",
+      "sessionId": "session-001",
+      "filename": "1749556311920-280325_ALBA_CAVERO 00443.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_14_1749556311920-280325_ALBA_CAVERO_00443.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_14_1749556311920-280325_ALBA_CAVERO_00443.jpg",
+      "uploadOrder": 64,
+      "createdAt": 1752228211149
+    },
+    "photo-session-001-1752228208075-15": {
+      "id": "photo-session-001-1752228208075-15",
+      "sessionId": "session-001",
+      "filename": "1749556312142-280325_ALBA_CAVERO 00444.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_15_1749556312142-280325_ALBA_CAVERO_00444.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_15_1749556312142-280325_ALBA_CAVERO_00444.jpg",
+      "uploadOrder": 65,
+      "createdAt": 1752228211262
+    },
+    "photo-session-001-1752228208075-16": {
+      "id": "photo-session-001-1752228208075-16",
+      "sessionId": "session-001",
+      "filename": "1749556312224-280325_ALBA_CAVERO 00446.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_16_1749556312224-280325_ALBA_CAVERO_00446.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_16_1749556312224-280325_ALBA_CAVERO_00446.jpg",
+      "uploadOrder": 66,
+      "createdAt": 1752228211515
+    },
+    "photo-session-001-1752228208075-17": {
+      "id": "photo-session-001-1752228208075-17",
+      "sessionId": "session-001",
+      "filename": "1749556312296-280325_ALBA_CAVERO 00481.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_17_1749556312296-280325_ALBA_CAVERO_00481.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_17_1749556312296-280325_ALBA_CAVERO_00481.jpg",
+      "uploadOrder": 67,
+      "createdAt": 1752228211670
+    },
+    "photo-session-001-1752228208075-18": {
+      "id": "photo-session-001-1752228208075-18",
+      "sessionId": "session-001",
+      "filename": "1749556312575-280325_ALBA_CAVERO 00486.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_18_1749556312575-280325_ALBA_CAVERO_00486.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_18_1749556312575-280325_ALBA_CAVERO_00486.jpg",
+      "uploadOrder": 68,
+      "createdAt": 1752228211885
+    },
+    "photo-session-001-1752228208075-19": {
+      "id": "photo-session-001-1752228208075-19",
+      "sessionId": "session-001",
+      "filename": "1749556312645-280325_ALBA_CAVERO 00498.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_19_1749556312645-280325_ALBA_CAVERO_00498.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_19_1749556312645-280325_ALBA_CAVERO_00498.jpg",
+      "uploadOrder": 69,
+      "createdAt": 1752228212014
+    },
+    "photo-session-001-1752228208075-20": {
+      "id": "photo-session-001-1752228208075-20",
+      "sessionId": "session-001",
+      "filename": "1749556312921-280325_ALBA_CAVERO 00512.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_20_1749556312921-280325_ALBA_CAVERO_00512.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_20_1749556312921-280325_ALBA_CAVERO_00512.jpg",
+      "uploadOrder": 70,
+      "createdAt": 1752228212229
+    },
+    "photo-session-001-1752228208075-21": {
+      "id": "photo-session-001-1752228208075-21",
+      "sessionId": "session-001",
+      "filename": "1749556313043-280325_ALBA_CAVERO 00516.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_21_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_21_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "uploadOrder": 71,
+      "createdAt": 1752228212368
+    },
+    "photo-session-001-1752228208075-22": {
+      "id": "photo-session-001-1752228208075-22",
+      "sessionId": "session-001",
+      "filename": "1749556313137-280325_ALBA_CAVERO 01959.jpg",
+      "originalUrl": "/uploads/session-001/1752228208075_22_1749556313137-280325_ALBA_CAVERO_01959.jpg",
+      "thumbnailUrl": "/uploads/session-001/thumbnails/1752228208075_22_1749556313137-280325_ALBA_CAVERO_01959.jpg",
+      "uploadOrder": 72,
+      "createdAt": 1752228212504
+    },
+    "photo-session-1752228283162-1752228295570-0": {
+      "id": "photo-session-1752228283162-1752228295570-0",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556308677-2025_03_27 yuxus02074.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_0_1749556308677-2025_03_27_yuxus02074.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_0_1749556308677-2025_03_27_yuxus02074.jpg",
+      "uploadOrder": 1,
+      "createdAt": 1752228295771
+    },
+    "photo-session-1752228283162-1752228295570-1": {
+      "id": "photo-session-1752228283162-1752228295570-1",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556308992-280325_ALBA_CAVERO 00012.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_1_1749556308992-280325_ALBA_CAVERO_00012.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_1_1749556308992-280325_ALBA_CAVERO_00012.jpg",
+      "uploadOrder": 2,
+      "createdAt": 1752228295923
+    },
+    "photo-session-1752228283162-1752228295570-2": {
+      "id": "photo-session-1752228283162-1752228295570-2",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556309211-280325_ALBA_CAVERO 00013.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_2_1749556309211-280325_ALBA_CAVERO_00013.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_2_1749556309211-280325_ALBA_CAVERO_00013.jpg",
+      "uploadOrder": 3,
+      "createdAt": 1752228296125
+    },
+    "photo-session-1752228283162-1752228295570-3": {
+      "id": "photo-session-1752228283162-1752228295570-3",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556309300-280325_ALBA_CAVERO 00058.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_3_1749556309300-280325_ALBA_CAVERO_00058.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_3_1749556309300-280325_ALBA_CAVERO_00058.jpg",
+      "uploadOrder": 4,
+      "createdAt": 1752228296237
+    },
+    "photo-session-1752228283162-1752228295570-4": {
+      "id": "photo-session-1752228283162-1752228295570-4",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556309643-280325_ALBA_CAVERO 00068.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_4_1749556309643-280325_ALBA_CAVERO_00068.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_4_1749556309643-280325_ALBA_CAVERO_00068.jpg",
+      "uploadOrder": 5,
+      "createdAt": 1752228296341
+    },
+    "photo-session-1752228283162-1752228295570-5": {
+      "id": "photo-session-1752228283162-1752228295570-5",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556309764-280325_ALBA_CAVERO 00071.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_5_1749556309764-280325_ALBA_CAVERO_00071.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_5_1749556309764-280325_ALBA_CAVERO_00071.jpg",
+      "uploadOrder": 6,
+      "createdAt": 1752228296720
+    },
+    "photo-session-1752228283162-1752228295570-6": {
+      "id": "photo-session-1752228283162-1752228295570-6",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556310351-280325_ALBA_CAVERO 00124.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_6_1749556310351-280325_ALBA_CAVERO_00124.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_6_1749556310351-280325_ALBA_CAVERO_00124.jpg",
+      "uploadOrder": 7,
+      "createdAt": 1752228297041
+    },
+    "photo-session-1752228283162-1752228295570-7": {
+      "id": "photo-session-1752228283162-1752228295570-7",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556310513-280325_ALBA_CAVERO 00137.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_7_1749556310513-280325_ALBA_CAVERO_00137.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_7_1749556310513-280325_ALBA_CAVERO_00137.jpg",
+      "uploadOrder": 8,
+      "createdAt": 1752228297221
+    },
+    "photo-session-1752228283162-1752228295570-8": {
+      "id": "photo-session-1752228283162-1752228295570-8",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556310973-280325_ALBA_CAVERO 00318.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_8_1749556310973-280325_ALBA_CAVERO_00318.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_8_1749556310973-280325_ALBA_CAVERO_00318.jpg",
+      "uploadOrder": 9,
+      "createdAt": 1752228297549
+    },
+    "photo-session-1752228283162-1752228295570-9": {
+      "id": "photo-session-1752228283162-1752228295570-9",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311065-280325_ALBA_CAVERO 00349.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_9_1749556311065-280325_ALBA_CAVERO_00349.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_9_1749556311065-280325_ALBA_CAVERO_00349.jpg",
+      "uploadOrder": 10,
+      "createdAt": 1752228297748
+    },
+    "photo-session-1752228283162-1752228295570-10": {
+      "id": "photo-session-1752228283162-1752228295570-10",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311500-280325_ALBA_CAVERO 00399.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_10_1749556311500-280325_ALBA_CAVERO_00399.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_10_1749556311500-280325_ALBA_CAVERO_00399.jpg",
+      "uploadOrder": 11,
+      "createdAt": 1752228297990
+    },
+    "photo-session-1752228283162-1752228295570-11": {
+      "id": "photo-session-1752228283162-1752228295570-11",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311571-280325_ALBA_CAVERO 00430.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_11_1749556311571-280325_ALBA_CAVERO_00430.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_11_1749556311571-280325_ALBA_CAVERO_00430.jpg",
+      "uploadOrder": 12,
+      "createdAt": 1752228298140
+    },
+    "photo-session-1752228283162-1752228295570-12": {
+      "id": "photo-session-1752228283162-1752228295570-12",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311793-280325_ALBA_CAVERO 00435.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_12_1749556311793-280325_ALBA_CAVERO_00435.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_12_1749556311793-280325_ALBA_CAVERO_00435.jpg",
+      "uploadOrder": 13,
+      "createdAt": 1752228298427
+    },
+    "photo-session-1752228283162-1752228295570-13": {
+      "id": "photo-session-1752228283162-1752228295570-13",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311862-280325_ALBA_CAVERO 00438.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_13_1749556311862-280325_ALBA_CAVERO_00438.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_13_1749556311862-280325_ALBA_CAVERO_00438.jpg",
+      "uploadOrder": 14,
+      "createdAt": 1752228298622
+    },
+    "photo-session-1752228283162-1752228295570-14": {
+      "id": "photo-session-1752228283162-1752228295570-14",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556311920-280325_ALBA_CAVERO 00443.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_14_1749556311920-280325_ALBA_CAVERO_00443.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_14_1749556311920-280325_ALBA_CAVERO_00443.jpg",
+      "uploadOrder": 15,
+      "createdAt": 1752228298867
+    },
+    "photo-session-1752228283162-1752228295570-15": {
+      "id": "photo-session-1752228283162-1752228295570-15",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312142-280325_ALBA_CAVERO 00444.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_15_1749556312142-280325_ALBA_CAVERO_00444.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_15_1749556312142-280325_ALBA_CAVERO_00444.jpg",
+      "uploadOrder": 16,
+      "createdAt": 1752228299014
+    },
+    "photo-session-1752228283162-1752228295570-16": {
+      "id": "photo-session-1752228283162-1752228295570-16",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312224-280325_ALBA_CAVERO 00446.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_16_1749556312224-280325_ALBA_CAVERO_00446.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_16_1749556312224-280325_ALBA_CAVERO_00446.jpg",
+      "uploadOrder": 17,
+      "createdAt": 1752228299208
+    },
+    "photo-session-1752228283162-1752228295570-17": {
+      "id": "photo-session-1752228283162-1752228295570-17",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312296-280325_ALBA_CAVERO 00481.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_17_1749556312296-280325_ALBA_CAVERO_00481.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_17_1749556312296-280325_ALBA_CAVERO_00481.jpg",
+      "uploadOrder": 18,
+      "createdAt": 1752228299320
+    },
+    "photo-session-1752228283162-1752228295570-18": {
+      "id": "photo-session-1752228283162-1752228295570-18",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312575-280325_ALBA_CAVERO 00486.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_18_1749556312575-280325_ALBA_CAVERO_00486.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_18_1749556312575-280325_ALBA_CAVERO_00486.jpg",
+      "uploadOrder": 19,
+      "createdAt": 1752228299577
+    },
+    "photo-session-1752228283162-1752228295570-19": {
+      "id": "photo-session-1752228283162-1752228295570-19",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312645-280325_ALBA_CAVERO 00498.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_19_1749556312645-280325_ALBA_CAVERO_00498.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_19_1749556312645-280325_ALBA_CAVERO_00498.jpg",
+      "uploadOrder": 20,
+      "createdAt": 1752228299875
+    },
+    "photo-session-1752228283162-1752228295570-20": {
+      "id": "photo-session-1752228283162-1752228295570-20",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556312921-280325_ALBA_CAVERO 00512.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_20_1749556312921-280325_ALBA_CAVERO_00512.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_20_1749556312921-280325_ALBA_CAVERO_00512.jpg",
+      "uploadOrder": 21,
+      "createdAt": 1752228300135
+    },
+    "photo-session-1752228283162-1752228295570-21": {
+      "id": "photo-session-1752228283162-1752228295570-21",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556313043-280325_ALBA_CAVERO 00516.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_21_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_21_1749556313043-280325_ALBA_CAVERO_00516.jpg",
+      "uploadOrder": 22,
+      "createdAt": 1752228300595
+    },
+    "photo-session-1752228283162-1752228295570-22": {
+      "id": "photo-session-1752228283162-1752228295570-22",
+      "sessionId": "session-1752228283162",
+      "filename": "1749556313137-280325_ALBA_CAVERO 01959.jpg",
+      "originalUrl": "/uploads/session-1752228283162/1752228295570_22_1749556313137-280325_ALBA_CAVERO_01959.jpg",
+      "thumbnailUrl": "/uploads/session-1752228283162/thumbnails/1752228295570_22_1749556313137-280325_ALBA_CAVERO_01959.jpg",
+      "uploadOrder": 23,
+      "createdAt": 1752228300701
+    },
+    "photo-session-1752228546456-1752228591070-0": {
+      "id": "photo-session-1752228546456-1752228591070-0",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_1.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_0_URGENTE_1.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_0_URGENTE_1.webp",
+      "uploadOrder": 1,
+      "createdAt": 1752228591374
+    },
+    "photo-session-1752228546456-1752228591070-1": {
+      "id": "photo-session-1752228546456-1752228591070-1",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_2.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_1_URGENTE_2.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_1_URGENTE_2.webp",
+      "uploadOrder": 2,
+      "createdAt": 1752228591772
+    },
+    "photo-session-1752228546456-1752228591070-2": {
+      "id": "photo-session-1752228546456-1752228591070-2",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_4.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_2_URGENTE_4.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_2_URGENTE_4.webp",
+      "uploadOrder": 3,
+      "createdAt": 1752228592145
+    },
+    "photo-session-1752228546456-1752228591070-3": {
+      "id": "photo-session-1752228546456-1752228591070-3",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_7.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_3_URGENTE_7.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_3_URGENTE_7.webp",
+      "uploadOrder": 4,
+      "createdAt": 1752228592641
+    },
+    "photo-session-1752228546456-1752228591070-4": {
+      "id": "photo-session-1752228546456-1752228591070-4",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_8.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_4_URGENTE_8.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_4_URGENTE_8.webp",
+      "uploadOrder": 5,
+      "createdAt": 1752228593128
+    },
+    "photo-session-1752228546456-1752228591070-5": {
+      "id": "photo-session-1752228546456-1752228591070-5",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_12.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_5_URGENTE_12.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_5_URGENTE_12.webp",
+      "uploadOrder": 6,
+      "createdAt": 1752228593664
+    },
+    "photo-session-1752228546456-1752228591070-6": {
+      "id": "photo-session-1752228546456-1752228591070-6",
+      "sessionId": "session-1752228546456",
+      "filename": "URGENTE_14.webp",
+      "originalUrl": "/uploads/session-1752228546456/1752228591070_6_URGENTE_14.webp",
+      "thumbnailUrl": "/uploads/session-1752228546456/thumbnails/1752228591070_6_URGENTE_14.webp",
+      "uploadOrder": 7,
+      "createdAt": 1752228594111
+    }
+  },
+  "photoReviews": {
+    "review-photo-1": {
+      "id": "review-photo-1",
+      "photoId": "photo-1",
+      "rating": 2,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-2": {
+      "id": "review-photo-2",
+      "photoId": "photo-2",
+      "rating": 3,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-3": {
+      "id": "review-photo-3",
+      "photoId": "photo-3",
+      "rating": 4,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-4": {
+      "id": "review-photo-4",
+      "photoId": "photo-4",
+      "rating": 5,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-5": {
+      "id": "review-photo-5",
+      "photoId": "photo-5",
+      "rating": 1,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-6": {
+      "id": "review-photo-6",
+      "photoId": "photo-6",
+      "rating": 2,
+      "colorTag": "red",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-7": {
+      "id": "review-photo-7",
+      "photoId": "photo-7",
+      "rating": 3,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": true,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-8": {
+      "id": "review-photo-8",
+      "photoId": "photo-8",
+      "rating": 4,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-9": {
+      "id": "review-photo-9",
+      "photoId": "photo-9",
+      "rating": 5,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-10": {
+      "id": "review-photo-10",
+      "photoId": "photo-10",
+      "rating": 1,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-11": {
+      "id": "review-photo-11",
+      "photoId": "photo-11",
+      "rating": 2,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": true,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-12": {
+      "id": "review-photo-12",
+      "photoId": "photo-12",
+      "rating": 3,
+      "colorTag": "green",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-13": {
+      "id": "review-photo-13",
+      "photoId": "photo-13",
+      "rating": 4,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-14": {
+      "id": "review-photo-14",
+      "photoId": "photo-14",
+      "rating": 5,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": true,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-15": {
+      "id": "review-photo-15",
+      "photoId": "photo-15",
+      "rating": 1,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-16": {
+      "id": "review-photo-16",
+      "photoId": "photo-16",
+      "rating": 2,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-17": {
+      "id": "review-photo-17",
+      "photoId": "photo-17",
+      "rating": 3,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-18": {
+      "id": "review-photo-18",
+      "photoId": "photo-18",
+      "rating": 4,
+      "colorTag": "red",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-19": {
+      "id": "review-photo-19",
+      "photoId": "photo-19",
+      "rating": 5,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-20": {
+      "id": "review-photo-20",
+      "photoId": "photo-20",
+      "rating": 1,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-21": {
+      "id": "review-photo-21",
+      "photoId": "photo-21",
+      "rating": 2,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": true,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-22": {
+      "id": "review-photo-22",
+      "photoId": "photo-22",
+      "rating": 3,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-23": {
+      "id": "review-photo-23",
+      "photoId": "photo-23",
+      "rating": 4,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-24": {
+      "id": "review-photo-24",
+      "photoId": "photo-24",
+      "rating": 5,
+      "colorTag": "green",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-25": {
+      "id": "review-photo-25",
+      "photoId": "photo-25",
+      "rating": 1,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-26": {
+      "id": "review-photo-26",
+      "photoId": "photo-26",
+      "rating": 2,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-27": {
+      "id": "review-photo-27",
+      "photoId": "photo-27",
+      "rating": 3,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-28": {
+      "id": "review-photo-28",
+      "photoId": "photo-28",
+      "rating": 4,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": true,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-29": {
+      "id": "review-photo-29",
+      "photoId": "photo-29",
+      "rating": 5,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-30": {
+      "id": "review-photo-30",
+      "photoId": "photo-30",
+      "rating": 1,
+      "colorTag": "red",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-31": {
+      "id": "review-photo-31",
+      "photoId": "photo-31",
+      "rating": 2,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-32": {
+      "id": "review-photo-32",
+      "photoId": "photo-32",
+      "rating": 3,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-33": {
+      "id": "review-photo-33",
+      "photoId": "photo-33",
+      "rating": 4,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-34": {
+      "id": "review-photo-34",
+      "photoId": "photo-34",
+      "rating": 5,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-35": {
+      "id": "review-photo-35",
+      "photoId": "photo-35",
+      "rating": 1,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": true,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-36": {
+      "id": "review-photo-36",
+      "photoId": "photo-36",
+      "rating": 2,
+      "colorTag": "green",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-37": {
+      "id": "review-photo-37",
+      "photoId": "photo-37",
+      "rating": 3,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-38": {
+      "id": "review-photo-38",
+      "photoId": "photo-38",
+      "rating": 4,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-39": {
+      "id": "review-photo-39",
+      "photoId": "photo-39",
+      "rating": 5,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-40": {
+      "id": "review-photo-40",
+      "photoId": "photo-40",
+      "rating": 1,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-41": {
+      "id": "review-photo-41",
+      "photoId": "photo-41",
+      "rating": 2,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-42": {
+      "id": "review-photo-42",
+      "photoId": "photo-42",
+      "rating": 3,
+      "colorTag": "red",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": true,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-43": {
+      "id": "review-photo-43",
+      "photoId": "photo-43",
+      "rating": 4,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-44": {
+      "id": "review-photo-44",
+      "photoId": "photo-44",
+      "rating": 5,
+      "colorTag": "green",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-45": {
+      "id": "review-photo-45",
+      "photoId": "photo-45",
+      "rating": 1,
+      "colorTag": "yellow",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-46": {
+      "id": "review-photo-46",
+      "photoId": "photo-46",
+      "rating": 2,
+      "colorTag": "red",
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-47": {
+      "id": "review-photo-47",
+      "photoId": "photo-47",
+      "rating": 3,
+      "colorTag": null,
+      "comment": "",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-48": {
+      "id": "review-photo-48",
+      "photoId": "photo-48",
+      "rating": 4,
+      "colorTag": "green",
+      "comment": "Me encanta esta foto, perfecta para imprimir",
+      "isFavorite": false,
+      "isReviewed": false,
+      "updatedAt": 1752228065718
+    },
+    "review-photo-session-001-1752228191857-0": {
+      "id": "review-photo-session-001-1752228191857-0",
+      "photoId": "photo-session-001-1752228191857-0",
+      "rating": 3,
+      "updatedAt": 1752228192044
+    },
+    "review-photo-session-001-1752228208075-0": {
+      "id": "review-photo-session-001-1752228208075-0",
+      "photoId": "photo-session-001-1752228208075-0",
+      "rating": 3,
+      "updatedAt": 1752228208158
+    },
+    "review-photo-session-001-1752228208075-1": {
+      "id": "review-photo-session-001-1752228208075-1",
+      "photoId": "photo-session-001-1752228208075-1",
+      "rating": 3,
+      "updatedAt": 1752228208442
+    },
+    "review-photo-session-001-1752228208075-2": {
+      "id": "review-photo-session-001-1752228208075-2",
+      "photoId": "photo-session-001-1752228208075-2",
+      "rating": 3,
+      "updatedAt": 1752228208567
+    },
+    "review-photo-session-001-1752228208075-3": {
+      "id": "review-photo-session-001-1752228208075-3",
+      "photoId": "photo-session-001-1752228208075-3",
+      "rating": 3,
+      "updatedAt": 1752228208758
+    },
+    "review-photo-session-001-1752228208075-4": {
+      "id": "review-photo-session-001-1752228208075-4",
+      "photoId": "photo-session-001-1752228208075-4",
+      "rating": 3,
+      "updatedAt": 1752228208899
+    },
+    "review-photo-session-001-1752228208075-5": {
+      "id": "review-photo-session-001-1752228208075-5",
+      "photoId": "photo-session-001-1752228208075-5",
+      "rating": 3,
+      "updatedAt": 1752228209012
+    },
+    "review-photo-session-001-1752228208075-6": {
+      "id": "review-photo-session-001-1752228208075-6",
+      "photoId": "photo-session-001-1752228208075-6",
+      "rating": 3,
+      "updatedAt": 1752228209313
+    },
+    "review-photo-session-001-1752228208075-7": {
+      "id": "review-photo-session-001-1752228208075-7",
+      "photoId": "photo-session-001-1752228208075-7",
+      "rating": 3,
+      "updatedAt": 1752228209429
+    },
+    "review-photo-session-001-1752228208075-8": {
+      "id": "review-photo-session-001-1752228208075-8",
+      "photoId": "photo-session-001-1752228208075-8",
+      "rating": 3,
+      "updatedAt": 1752228209763
+    },
+    "review-photo-session-001-1752228208075-9": {
+      "id": "review-photo-session-001-1752228208075-9",
+      "photoId": "photo-session-001-1752228208075-9",
+      "rating": 3,
+      "updatedAt": 1752228209888
+    },
+    "review-photo-session-001-1752228208075-10": {
+      "id": "review-photo-session-001-1752228208075-10",
+      "photoId": "photo-session-001-1752228208075-10",
+      "rating": 3,
+      "updatedAt": 1752228210231
+    },
+    "review-photo-session-001-1752228208075-11": {
+      "id": "review-photo-session-001-1752228208075-11",
+      "photoId": "photo-session-001-1752228208075-11",
+      "rating": 3,
+      "updatedAt": 1752228210549
+    },
+    "review-photo-session-001-1752228208075-12": {
+      "id": "review-photo-session-001-1752228208075-12",
+      "photoId": "photo-session-001-1752228208075-12",
+      "rating": 3,
+      "updatedAt": 1752228210733
+    },
+    "review-photo-session-001-1752228208075-13": {
+      "id": "review-photo-session-001-1752228208075-13",
+      "photoId": "photo-session-001-1752228208075-13",
+      "rating": 3,
+      "updatedAt": 1752228211008
+    },
+    "review-photo-session-001-1752228208075-14": {
+      "id": "review-photo-session-001-1752228208075-14",
+      "photoId": "photo-session-001-1752228208075-14",
+      "rating": 3,
+      "updatedAt": 1752228211149
+    },
+    "review-photo-session-001-1752228208075-15": {
+      "id": "review-photo-session-001-1752228208075-15",
+      "photoId": "photo-session-001-1752228208075-15",
+      "rating": 3,
+      "updatedAt": 1752228211262
+    },
+    "review-photo-session-001-1752228208075-16": {
+      "id": "review-photo-session-001-1752228208075-16",
+      "photoId": "photo-session-001-1752228208075-16",
+      "rating": 3,
+      "updatedAt": 1752228211515
+    },
+    "review-photo-session-001-1752228208075-17": {
+      "id": "review-photo-session-001-1752228208075-17",
+      "photoId": "photo-session-001-1752228208075-17",
+      "rating": 3,
+      "updatedAt": 1752228211670
+    },
+    "review-photo-session-001-1752228208075-18": {
+      "id": "review-photo-session-001-1752228208075-18",
+      "photoId": "photo-session-001-1752228208075-18",
+      "rating": 3,
+      "updatedAt": 1752228211885
+    },
+    "review-photo-session-001-1752228208075-19": {
+      "id": "review-photo-session-001-1752228208075-19",
+      "photoId": "photo-session-001-1752228208075-19",
+      "rating": 3,
+      "updatedAt": 1752228212015
+    },
+    "review-photo-session-001-1752228208075-20": {
+      "id": "review-photo-session-001-1752228208075-20",
+      "photoId": "photo-session-001-1752228208075-20",
+      "rating": 3,
+      "updatedAt": 1752228212229
+    },
+    "review-photo-session-001-1752228208075-21": {
+      "id": "review-photo-session-001-1752228208075-21",
+      "photoId": "photo-session-001-1752228208075-21",
+      "rating": 3,
+      "updatedAt": 1752228212368
+    },
+    "review-photo-session-001-1752228208075-22": {
+      "id": "review-photo-session-001-1752228208075-22",
+      "photoId": "photo-session-001-1752228208075-22",
+      "rating": 3,
+      "updatedAt": 1752228212504
+    },
+    "review-photo-session-1752228283162-1752228295570-0": {
+      "id": "review-photo-session-1752228283162-1752228295570-0",
+      "photoId": "photo-session-1752228283162-1752228295570-0",
+      "rating": 3,
+      "updatedAt": 1752228295771
+    },
+    "review-photo-session-1752228283162-1752228295570-1": {
+      "id": "review-photo-session-1752228283162-1752228295570-1",
+      "photoId": "photo-session-1752228283162-1752228295570-1",
+      "rating": 3,
+      "updatedAt": 1752228295923
+    },
+    "review-photo-session-1752228283162-1752228295570-2": {
+      "id": "review-photo-session-1752228283162-1752228295570-2",
+      "photoId": "photo-session-1752228283162-1752228295570-2",
+      "rating": 3,
+      "updatedAt": 1752228296125
+    },
+    "review-photo-session-1752228283162-1752228295570-3": {
+      "id": "review-photo-session-1752228283162-1752228295570-3",
+      "photoId": "photo-session-1752228283162-1752228295570-3",
+      "rating": 3,
+      "updatedAt": 1752228296237
+    },
+    "review-photo-session-1752228283162-1752228295570-4": {
+      "id": "review-photo-session-1752228283162-1752228295570-4",
+      "photoId": "photo-session-1752228283162-1752228295570-4",
+      "rating": 3,
+      "updatedAt": 1752228296341
+    },
+    "review-photo-session-1752228283162-1752228295570-5": {
+      "id": "review-photo-session-1752228283162-1752228295570-5",
+      "photoId": "photo-session-1752228283162-1752228295570-5",
+      "rating": 3,
+      "updatedAt": 1752228296720
+    },
+    "review-photo-session-1752228283162-1752228295570-6": {
+      "id": "review-photo-session-1752228283162-1752228295570-6",
+      "photoId": "photo-session-1752228283162-1752228295570-6",
+      "rating": 3,
+      "updatedAt": 1752228297041
+    },
+    "review-photo-session-1752228283162-1752228295570-7": {
+      "id": "review-photo-session-1752228283162-1752228295570-7",
+      "photoId": "photo-session-1752228283162-1752228295570-7",
+      "rating": 3,
+      "updatedAt": 1752228297221
+    },
+    "review-photo-session-1752228283162-1752228295570-8": {
+      "id": "review-photo-session-1752228283162-1752228295570-8",
+      "photoId": "photo-session-1752228283162-1752228295570-8",
+      "rating": 3,
+      "updatedAt": 1752228297549
+    },
+    "review-photo-session-1752228283162-1752228295570-9": {
+      "id": "review-photo-session-1752228283162-1752228295570-9",
+      "photoId": "photo-session-1752228283162-1752228295570-9",
+      "rating": 3,
+      "updatedAt": 1752228297748
+    },
+    "review-photo-session-1752228283162-1752228295570-10": {
+      "id": "review-photo-session-1752228283162-1752228295570-10",
+      "photoId": "photo-session-1752228283162-1752228295570-10",
+      "rating": 3,
+      "updatedAt": 1752228297990
+    },
+    "review-photo-session-1752228283162-1752228295570-11": {
+      "id": "review-photo-session-1752228283162-1752228295570-11",
+      "photoId": "photo-session-1752228283162-1752228295570-11",
+      "rating": 3,
+      "updatedAt": 1752228298140
+    },
+    "review-photo-session-1752228283162-1752228295570-12": {
+      "id": "review-photo-session-1752228283162-1752228295570-12",
+      "photoId": "photo-session-1752228283162-1752228295570-12",
+      "rating": 3,
+      "updatedAt": 1752228298427
+    },
+    "review-photo-session-1752228283162-1752228295570-13": {
+      "id": "review-photo-session-1752228283162-1752228295570-13",
+      "photoId": "photo-session-1752228283162-1752228295570-13",
+      "rating": 3,
+      "updatedAt": 1752228298622
+    },
+    "review-photo-session-1752228283162-1752228295570-14": {
+      "id": "review-photo-session-1752228283162-1752228295570-14",
+      "photoId": "photo-session-1752228283162-1752228295570-14",
+      "rating": 3,
+      "updatedAt": 1752228298867
+    },
+    "review-photo-session-1752228283162-1752228295570-15": {
+      "id": "review-photo-session-1752228283162-1752228295570-15",
+      "photoId": "photo-session-1752228283162-1752228295570-15",
+      "rating": 3,
+      "updatedAt": 1752228299014
+    },
+    "review-photo-session-1752228283162-1752228295570-16": {
+      "id": "review-photo-session-1752228283162-1752228295570-16",
+      "photoId": "photo-session-1752228283162-1752228295570-16",
+      "rating": 3,
+      "updatedAt": 1752228299208
+    },
+    "review-photo-session-1752228283162-1752228295570-17": {
+      "id": "review-photo-session-1752228283162-1752228295570-17",
+      "photoId": "photo-session-1752228283162-1752228295570-17",
+      "rating": 3,
+      "updatedAt": 1752228299320
+    },
+    "review-photo-session-1752228283162-1752228295570-18": {
+      "id": "review-photo-session-1752228283162-1752228295570-18",
+      "photoId": "photo-session-1752228283162-1752228295570-18",
+      "rating": 3,
+      "updatedAt": 1752228299577
+    },
+    "review-photo-session-1752228283162-1752228295570-19": {
+      "id": "review-photo-session-1752228283162-1752228295570-19",
+      "photoId": "photo-session-1752228283162-1752228295570-19",
+      "rating": 3,
+      "updatedAt": 1752228299875
+    },
+    "review-photo-session-1752228283162-1752228295570-20": {
+      "id": "review-photo-session-1752228283162-1752228295570-20",
+      "photoId": "photo-session-1752228283162-1752228295570-20",
+      "rating": 3,
+      "updatedAt": 1752228300135
+    },
+    "review-photo-session-1752228283162-1752228295570-21": {
+      "id": "review-photo-session-1752228283162-1752228295570-21",
+      "photoId": "photo-session-1752228283162-1752228295570-21",
+      "rating": 3,
+      "updatedAt": 1752228300595
+    },
+    "review-photo-session-1752228283162-1752228295570-22": {
+      "id": "review-photo-session-1752228283162-1752228295570-22",
+      "photoId": "photo-session-1752228283162-1752228295570-22",
+      "rating": 3,
+      "updatedAt": 1752228300701
+    },
+    "review-photo-session-1752228546456-1752228591070-0": {
+      "id": "review-photo-session-1752228546456-1752228591070-0",
+      "photoId": "photo-session-1752228546456-1752228591070-0",
+      "rating": 3,
+      "updatedAt": 1752228591374
+    },
+    "review-photo-session-1752228546456-1752228591070-1": {
+      "id": "review-photo-session-1752228546456-1752228591070-1",
+      "photoId": "photo-session-1752228546456-1752228591070-1",
+      "rating": 3,
+      "updatedAt": 1752228591772
+    },
+    "review-photo-session-1752228546456-1752228591070-2": {
+      "id": "review-photo-session-1752228546456-1752228591070-2",
+      "photoId": "photo-session-1752228546456-1752228591070-2",
+      "rating": 3,
+      "updatedAt": 1752228592145
+    },
+    "review-photo-session-1752228546456-1752228591070-3": {
+      "id": "review-photo-session-1752228546456-1752228591070-3",
+      "photoId": "photo-session-1752228546456-1752228591070-3",
+      "rating": 3,
+      "updatedAt": 1752228592641
+    },
+    "review-photo-session-1752228546456-1752228591070-4": {
+      "id": "review-photo-session-1752228546456-1752228591070-4",
+      "photoId": "photo-session-1752228546456-1752228591070-4",
+      "rating": 3,
+      "updatedAt": 1752228593128
+    },
+    "review-photo-session-1752228546456-1752228591070-5": {
+      "id": "review-photo-session-1752228546456-1752228591070-5",
+      "photoId": "photo-session-1752228546456-1752228591070-5",
+      "rating": 3,
+      "updatedAt": 1752228593664
+    },
+    "review-photo-session-1752228546456-1752228591070-6": {
+      "id": "review-photo-session-1752228546456-1752228591070-6",
+      "photoId": "photo-session-1752228546456-1752228591070-6",
+      "rating": 3,
+      "updatedAt": 1752228594111
+    }
+  },
+  "photographers": {
+    "demo-photographer": {
+      "id": "demo-photographer",
+      "name": "Studio Pro",
+      "email": "demo@example.com",
+      "passwordHash": "dummy-hash",
+      "studioName": "Studio Profesional",
+      "createdAt": 1752228065718
+    }
+  }
+}

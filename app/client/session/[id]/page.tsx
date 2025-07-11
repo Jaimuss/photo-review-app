@@ -29,6 +29,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress"
 import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
+import { Slideshow } from "@/components/slideshow"
+import { ExportDialog } from "@/components/export-dialog"
 
 // Types
 interface Photo {
@@ -69,6 +71,8 @@ export default function PhotoReviewSession() {
   const [filterColor, setFilterColor] = useState<string>("all")
   const [loading, setLoading] = useState(true)
   const [filteredPhotos, setFilteredPhotos] = useState<Photo[]>([])
+  const [showSlideshow, setShowSlideshow] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
 
   // Simular carga de datos del backend
   useEffect(() => {
@@ -343,7 +347,7 @@ export default function PhotoReviewSession() {
     onRatingChange,
     size = "w-5 h-5",
   }: { rating: number; onRatingChange?: (rating: number) => void; size?: string }) => (
-    <div className="flex gap-1">
+    <div className="flex gap-1 items-center">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
@@ -353,6 +357,13 @@ export default function PhotoReviewSession() {
           onClick={() => onRatingChange?.(star)}
         />
       ))}
+      <button
+        onClick={() => onRatingChange?.(0)}
+        className={`${size} cursor-pointer transition-colors text-red-400 ml-2`}
+        title="Quitar rating"
+      >
+        <X className={size} />
+      </button>
     </div>
   )
 
@@ -458,9 +469,9 @@ export default function PhotoReviewSession() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" className="gap-2" onClick={exportReport}>
+                <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
                   <Download className="w-4 h-4" />
-                  Exportar Reporte
+                  Exportar Excel
                 </Button>
                 <div className="hidden lg:block">
                   <ModeToggle />
@@ -510,6 +521,7 @@ export default function PhotoReviewSession() {
                     <SelectItem value="3">3 estrellas</SelectItem>
                     <SelectItem value="2">2 estrellas</SelectItem>
                     <SelectItem value="1">1 estrella</SelectItem>
+                    <SelectItem value="0">0 estrellas</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -548,6 +560,10 @@ export default function PhotoReviewSession() {
                       fill
                       className="object-cover cursor-pointer"
                       onClick={() => setSelectedPhoto(index)}
+                      onDoubleClick={() => {
+                        setSelectedPhoto(index);
+                        setShowSlideshow(true);
+                      }}
                     />
 
                     {/* Overlay con controles */}
@@ -784,6 +800,50 @@ export default function PhotoReviewSession() {
       </Dialog>
 
       <Toaster />
+
+      {/* Modal de Slideshow */}
+      <Slideshow
+        photos={filteredPhotos.map(photo => ({
+          id: photo.id,
+          url: photo.url,
+          rating: photo.rating || 0,
+          isFavorite: photo.isFavorite || false,
+          colorTag: photo.colorTag,
+          comments: photo.comments
+        }))}
+        isOpen={showSlideshow}
+        onClose={() => setShowSlideshow(false)}
+        startIndex={selectedPhoto || 0}
+        onUpdatePhoto={(photoId, updates) => {
+          setPhotos(prev => 
+            prev.map(photo => 
+              photo.id === photoId ? { ...photo, ...updates, isReviewed: true } : photo
+            )
+          )
+                 }}
+       />
+
+      {/* Diálogo de Exportación */}
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        session={{
+          id: session?.id || '',
+          clientName: session?.clientName || '',
+          photographer: session?.photographer || '',
+          date: session?.date || '',
+          location: session?.location || ''
+        }}
+                 photos={photos.map(photo => ({
+           id: photo.id,
+           filename: `foto_${photo.id}.jpg`,
+           rating: photo.rating,
+           isFavorite: photo.isFavorite,
+           colorTag: photo.colorTag,
+           comments: photo.comments,
+           isReviewed: photo.isReviewed
+         }))}
+      />
     </div>
   )
 }

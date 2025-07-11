@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Play, Pause, SkipBack, SkipForward, X, Settings, Heart, MessageSquare, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 interface Photo {
   id: string
@@ -92,45 +93,52 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
   }
 
   const updateRating = (rating: number) => {
-    const currentPhoto = photos[currentIndex]
-    if (onUpdatePhoto) {
+    const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+    const currentPhoto = photos[validIndex]
+    if (onUpdatePhoto && currentPhoto) {
       onUpdatePhoto(currentPhoto.id, { rating })
       // Update local state for immediate feedback
-      photos[currentIndex].rating = rating
+      photos[validIndex].rating = rating
     }
   }
 
   const toggleFavorite = () => {
-    const currentPhoto = photos[currentIndex]
-    if (onUpdatePhoto) {
+    const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+    const currentPhoto = photos[validIndex]
+    if (onUpdatePhoto && currentPhoto) {
       onUpdatePhoto(currentPhoto.id, { isFavorite: !currentPhoto.isFavorite })
       // Update local state for immediate feedback
-      photos[currentIndex].isFavorite = !currentPhoto.isFavorite
+      photos[validIndex].isFavorite = !currentPhoto.isFavorite
     }
   }
 
-  const setColorTag = (colorTag: string) => {
-    const currentPhoto = photos[currentIndex]
-    if (onUpdatePhoto) {
+  const setColorTag = (colorTag: string | null) => {
+    const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+    const currentPhoto = photos[validIndex]
+    if (onUpdatePhoto && currentPhoto) {
       onUpdatePhoto(currentPhoto.id, { colorTag })
       // Update local state for immediate feedback
-      photos[currentIndex].colorTag = colorTag
+      photos[validIndex].colorTag = colorTag
     }
   }
 
   const startEditingComment = () => {
-    const currentPhoto = photos[currentIndex]
-    setTempComment(currentPhoto.comments || '')
-    setEditingComment(true)
-    setIsPlaying(false) // Pausar slideshow mientras se edita
+    const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+    const currentPhoto = photos[validIndex]
+    if (currentPhoto) {
+      setTempComment(currentPhoto.comments || '')
+      setEditingComment(true)
+      setIsPlaying(false) // Pausar slideshow mientras se edita
+    }
   }
 
   const saveComment = () => {
-    const currentPhoto = photos[currentIndex]
-    if (onUpdatePhoto) {
+    const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+    const currentPhoto = photos[validIndex]
+    if (onUpdatePhoto && currentPhoto) {
       onUpdatePhoto(currentPhoto.id, { comments: tempComment })
       // Update local state for immediate feedback
-      photos[currentIndex].comments = tempComment
+      photos[validIndex].comments = tempComment
     }
     setEditingComment(false)
   }
@@ -188,6 +196,9 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
       case '5':
         updateRating(5)
         break
+      case '0':
+        updateRating(0)
+        break
       case 'f':
       case 'F':
         toggleFavorite()
@@ -210,7 +221,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
         break
       case 'n':
       case 'N':
-        setColorTag('') // Sin etiqueta
+        setColorTag(null) // Sin etiqueta
         break
     }
   }
@@ -229,7 +240,12 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
 
   if (!isOpen || photos.length === 0) return null
 
-  const currentPhoto = photos[currentIndex]
+  // Validar que currentIndex esté dentro del rango válido
+  const validIndex = Math.max(0, Math.min(currentIndex, photos.length - 1))
+  const currentPhoto = photos[validIndex]
+  
+  // Si no hay foto válida, no mostrar el slideshow
+  if (!currentPhoto) return null
 
   const getColorTagColor = (colorTag: string | null) => {
     switch (colorTag) {
@@ -243,6 +259,9 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-full max-h-full p-0 bg-black">
+        <VisuallyHidden.Root>
+          <DialogTitle>Slideshow de Fotos</DialogTitle>
+        </VisuallyHidden.Root>
         <div 
           className="relative w-screen h-screen flex items-center justify-center"
           onMouseMove={handleMouseMove}
@@ -251,7 +270,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
           <div className="relative w-full h-full">
             <Image
               src={currentPhoto.url || "/placeholder.svg"}
-              alt={`Foto ${currentIndex + 1}`}
+              alt={`Foto ${validIndex + 1}`}
               fill
               className={`object-contain transition-opacity duration-500 ${
                 transition === 'fade' ? 'opacity-100' : ''
@@ -265,15 +284,15 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
             showControls ? 'opacity-100' : 'opacity-0'
           }`}>
             {/* Header */}
-            <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-6">
+            <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-6 z-50">
               <div className="flex justify-between items-center text-white">
                 <div>
                   <h2 className="text-xl font-semibold">Slideshow</h2>
                   <p className="text-sm opacity-75">
-                    {currentIndex + 1} de {photos.length}
+                    {validIndex + 1} de {photos.length}
                   </p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/20">
+                <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/20 z-50">
                   <X className="w-6 h-6" />
                 </Button>
               </div>
@@ -359,11 +378,11 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
           </div>
 
           {/* Información de la foto - Siempre visible de forma discreta */}
-          <div className="absolute top-6 right-6 bg-black/60 text-white p-3 rounded-lg max-w-sm transition-all duration-300 hover:bg-black/90 hover:scale-105">
+          <div className="absolute top-20 right-6 bg-black/60 text-white p-3 rounded-lg max-w-sm transition-all duration-300 hover:bg-black/90 hover:scale-105 z-40">
             <div className="space-y-3">
               {/* Rating interactivo */}
               <div className="space-y-1">
-                <span className="text-sm font-medium">Rating (1-5):</span>
+                <span className="text-sm font-medium">Rating (0-5):</span>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -376,6 +395,13 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                       <Star className="w-full h-full fill-current" />
                     </button>
                   ))}
+                  <button
+                    onClick={() => updateRating(0)}
+                    className="w-6 h-6 transition-all hover:scale-110 text-red-400 ml-2"
+                    title="Quitar rating"
+                  >
+                    <X className="w-full h-full" />
+                  </button>
                 </div>
               </div>
 

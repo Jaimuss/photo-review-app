@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { database } from '@/lib/database'
-import { verifyPassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,16 +9,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email y contraseña requeridos' }, { status: 400 })
     }
 
-    // Para demo, permitir cualquier credencial válida
-    if (email === 'demo@example.com' && password === 'password') {
-      const token = generateToken('demo-user')
+    // Autenticación dummy usando DatabaseService
+    const photographer = await database.verifyPhotographer(email, password)
+    
+    if (photographer) {
+      // Token dummy simple (sin JWT por ahora)
+      const dummyToken = `dummy-token-${Date.now()}`
       
       const response = NextResponse.json({
         success: true,
-        user: { id: 'demo-user', name: 'Studio Pro', email: 'demo@example.com' }
+        user: { 
+          id: photographer.id, 
+          name: photographer.name, 
+          email: photographer.email,
+          studioName: photographer.studioName
+        }
       })
       
-      response.cookies.set('auth-token', token, {
+      response.cookies.set('auth-token', dummyToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -32,6 +39,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Credenciales inválidas' }, { status: 401 })
   } catch (error) {
+    console.error('Error en login:', error)
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }
 } 

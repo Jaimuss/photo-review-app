@@ -1,72 +1,25 @@
-import { db } from './db'
-import { sessions, photos, photoReviews } from './db/schema'
-import { eq, and } from 'drizzle-orm'
-
-// Forzar inicialización de la base de datos
-import './db'
+// Usando JSON Storage temporal en lugar de SQLite hasta resolver el problema de compilación
+import { jsonStorage } from './json-storage'
 
 export class DatabaseService {
   async getSession(sessionId: string) {
-    const result = await db.select().from(sessions).where(eq(sessions.id, sessionId)).limit(1)
-    return result[0] || null
+    return jsonStorage.getSession(sessionId)
   }
 
   async getSessionByToken(accessToken: string) {
-    const result = await db.select().from(sessions).where(eq(sessions.accessToken, accessToken)).limit(1)
-    return result[0] || null
+    return jsonStorage.getSessionByToken(accessToken)
   }
 
   async getSessionPhotos(sessionId: string) {
-    const result = await db
-      .select({
-        id: photos.id,
-        sessionId: photos.sessionId,
-        filename: photos.filename,
-        url: photos.originalUrl,
-        uploadOrder: photos.uploadOrder,
-        rating: photoReviews.rating,
-        colorTag: photoReviews.colorTag,
-        comments: photoReviews.comment,
-        isFavorite: photoReviews.isFavorite,
-        isReviewed: photoReviews.isReviewed,
-      })
-      .from(photos)
-      .leftJoin(photoReviews, eq(photos.id, photoReviews.photoId))
-      .where(eq(photos.sessionId, sessionId))
-      .orderBy(photos.uploadOrder)
-
-    return result
+    return jsonStorage.getSessionPhotos(sessionId)
   }
 
   async updatePhotoReview(photoId: string, data: any) {
-    const existing = await db.select().from(photoReviews).where(eq(photoReviews.photoId, photoId)).limit(1)
-    
-    if (existing.length > 0) {
-      await db.update(photoReviews)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(photoReviews.photoId, photoId))
-    } else {
-      await db.insert(photoReviews).values({
-        id: `review-${photoId}`,
-        photoId,
-        ...data,
-        updatedAt: new Date()
-      })
-    }
+    return jsonStorage.updatePhotoReview(photoId, data)
   }
 
   async getNextUploadOrder(sessionId: string): Promise<number> {
-    const result = await db
-      .select({ maxOrder: photos.uploadOrder })
-      .from(photos)
-      .where(eq(photos.sessionId, sessionId))
-      .orderBy(photos.uploadOrder)
-
-    const maxOrder = result.reduce((max, photo) => 
-      Math.max(max, photo.maxOrder || 0), 0
-    )
-    
-    return maxOrder + 1
+    return jsonStorage.getNextUploadOrder(sessionId)
   }
 
   async createPhoto(data: {
@@ -77,42 +30,35 @@ export class DatabaseService {
     thumbnailUrl?: string
     uploadOrder: number
   }) {
-    await db.insert(photos).values({
-      ...data,
-      createdAt: new Date()
-    })
-    
-    // Crear review inicial
-    await db.insert(photoReviews).values({
-      id: `review-${data.id}`,
-      photoId: data.id,
-      rating: 3,
-      updatedAt: new Date()
-    })
+    return jsonStorage.createPhoto(data)
   }
 
   async getSessionStats(sessionId: string) {
-    const photosData = await this.getSessionPhotos(sessionId)
-
-    return {
-      totalPhotos: photosData.length,
-      reviewedPhotos: photosData.filter((p: any) => p.isReviewed).length,
-      favoritePhotos: photosData.filter((p: any) => p.isFavorite).length,
-      selectedPhotos: photosData.filter((p: any) => p.colorTag === "green").length,
-      photosToReview: photosData.filter((p: any) => p.colorTag === "yellow").length,
-      photosToDiscard: photosData.filter((p: any) => p.colorTag === "red").length,
-      averageRating: photosData.length > 0 ? photosData.reduce((sum: number, p: any) => sum + (p.rating || 3), 0) / photosData.length : 0,
-      completionPercentage: photosData.length > 0 ? (photosData.filter((p: any) => p.isReviewed).length / photosData.length) * 100 : 0,
-    }
+    return jsonStorage.getSessionStats(sessionId)
   }
 
   async updatePhotoUrls(photoId: string, originalUrl: string, thumbnailUrl: string) {
-    await db.update(photos)
-      .set({ 
-        originalUrl,
-        thumbnailUrl
-      })
-      .where(eq(photos.id, photoId))
+    return jsonStorage.updatePhotoUrls(photoId, originalUrl, thumbnailUrl)
+  }
+
+  // Métodos adicionales para el MVP
+  async getAllSessions() {
+    return jsonStorage.getAllSessions()
+  }
+
+  async verifyPhotographer(email: string, password: string) {
+    return jsonStorage.verifyPhotographer(email, password)
+  }
+
+  async createSession(data: {
+    id: string
+    photographerId: string
+    clientName: string
+    location: string
+    sessionDate?: string
+    accessToken: string
+  }) {
+    return jsonStorage.createSession(data)
   }
 
 }

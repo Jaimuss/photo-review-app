@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Star, Camera, UserPlus, Lock } from "lucide-react"
+import { Star, Camera, UserPlus, Lock, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -288,7 +288,7 @@ export default function PhotoReviewSession() {
     onRatingChange,
     size = "w-5 h-5",
   }: { rating: number; onRatingChange?: (rating: number) => void; size?: string }) => (
-    <div className="flex gap-1">
+    <div className="flex gap-1 items-center">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
@@ -298,6 +298,13 @@ export default function PhotoReviewSession() {
           onClick={() => onRatingChange?.(star)}
         />
       ))}
+      <button
+        onClick={() => onRatingChange?.(0)}
+        className={`${size} cursor-pointer transition-colors text-red-400 ml-2`}
+        title="Quitar rating"
+      >
+        <X className={size} />
+      </button>
     </div>
   )
 
