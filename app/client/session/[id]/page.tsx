@@ -12,10 +12,11 @@ import {
   ArrowLeft,
   ArrowRight,
   X,
-  Check,
   ChevronUp,
   ChevronDown,
   Camera,
+  CheckSquare,
+  Settings,
 } from "lucide-react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
@@ -31,6 +32,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { Slideshow } from "@/components/slideshow"
 import { ExportDialog } from "@/components/export-dialog"
+import { PhotoComparison } from "@/components/photo-comparison"
 
 // Types
 interface Photo {
@@ -73,6 +75,10 @@ export default function PhotoReviewSession() {
   const [filteredPhotos, setFilteredPhotos] = useState<Photo[]>([])
   const [showSlideshow, setShowSlideshow] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
+  const [showComparison, setShowComparison] = useState(false)
+  // Estados para selección múltiple (unificada para acciones masivas y comparación)
+  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
+  const [showBulkActions, setShowBulkActions] = useState(false)
 
   // Simular carga de datos del backend
   useEffect(() => {
@@ -301,6 +307,123 @@ export default function PhotoReviewSession() {
     }
   }
 
+  // Funciones para selección múltiple
+  const togglePhotoSelection = (photoId: string) => {
+    setSelectedPhotos(prev => 
+      prev.includes(photoId) 
+        ? prev.filter(id => id !== photoId)
+        : [...prev, photoId]
+    )
+  }
+
+  const selectAllPhotos = () => {
+    setSelectedPhotos(filteredPhotos.map(photo => photo.id))
+  }
+
+  const clearSelection = () => {
+    setSelectedPhotos([])
+    setShowBulkActions(false)
+  }
+
+  // Efecto para cerrar acciones masivas cuando no hay fotos seleccionadas
+  useEffect(() => {
+    if (selectedPhotos.length === 0 && showBulkActions) {
+      setShowBulkActions(false)
+    }
+  }, [selectedPhotos.length, showBulkActions])
+
+  const startComparison = () => {
+    if (selectedPhotos.length >= 2) {
+      setShowComparison(true)
+    }
+  }
+
+  const applyBulkRating = async (rating: number) => {
+    const promises = selectedPhotos.map(photoId => updatePhotoRating(photoId, rating))
+    await Promise.all(promises)
+    clearSelection()
+  }
+
+  const applyBulkColorTag = async (colorTag: string | null) => {
+    const promises = selectedPhotos.map(photoId => updatePhotoColorTag(photoId, colorTag))
+    await Promise.all(promises)
+    clearSelection()
+  }
+
+  const applyBulkFavorite = async (isFavorite: boolean) => {
+    const promises = selectedPhotos.map(async (photoId) => {
+      try {
+        const response = await fetch('/api/photos/favorite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ photoId, isFavorite })
+        })
+        if (response.ok) {
+          setPhotos(prev => prev.map(photo => 
+            photo.id === photoId ? { ...photo, isFavorite } : photo
+          ))
+        }
+      } catch (error) {
+        console.error('Error al actualizar favorito:', error)
+      }
+    })
+    
+    await Promise.all(promises)
+    clearSelection()
+  }
+
+  // Controles de teclado para fotos seleccionadas
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Solo aplicar controles si hay fotos seleccionadas y no estamos en un input
+      if (selectedPhotos.length === 0 || 
+          e.target instanceof HTMLInputElement || 
+          e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      // Prevenir comportamiento por defecto para nuestras teclas
+      const preventDefaultKeys = ['0', '1', '2', '3', '4', '5', 'g', 'y', 'r', 'f', 'Escape']
+      if (preventDefaultKeys.includes(e.key.toLowerCase()) || preventDefaultKeys.includes(e.key)) {
+        e.preventDefault()
+      }
+
+      switch (e.key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+          const rating = parseInt(e.key)
+          applyBulkRating(rating)
+          break
+        case 'g':
+        case 'G':
+          applyBulkColorTag('green')
+          break
+        case 'y':
+        case 'Y':
+          applyBulkColorTag('yellow')
+          break
+        case 'r':
+        case 'R':
+          applyBulkColorTag('red')
+          break
+        case 'f':
+        case 'F':
+          applyBulkFavorite(true)
+          break
+        case 'Escape':
+          clearSelection()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedPhotos.length, applyBulkRating, applyBulkColorTag, applyBulkFavorite, clearSelection])
+
   // Navegación con teclado y scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -471,7 +594,7 @@ export default function PhotoReviewSession() {
               <div className="flex gap-2">
                 <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
                   <Download className="w-4 h-4" />
-                  Exportar Excel
+                  Exportar Revisión
                 </Button>
                 <div className="hidden lg:block">
                   <ModeToggle />
@@ -536,6 +659,45 @@ export default function PhotoReviewSession() {
                     <SelectItem value="red">Descartar</SelectItem>
                   </SelectContent>
                 </Select>
+                
+                {/* Controles de selección múltiple */}
+                <div className="h-6 w-px bg-border mx-2" />
+                <Button
+                  variant={selectedPhotos.length > 0 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => selectedPhotos.length > 0 ? clearSelection() : selectAllPhotos()}
+                  className="gap-2"
+                  title={selectedPhotos.length > 0 ? "Deseleccionar todas las fotos" : "Seleccionar todas las fotos (o usa CTRL + Click)"}
+                >
+                  <CheckSquare className="w-4 h-4" />
+                  {selectedPhotos.length > 0 ? `Deseleccionar (${selectedPhotos.length})` : "Seleccionar todo"}
+                </Button>
+                
+                {selectedPhotos.length >= 2 && selectedPhotos.length <= 4 && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={startComparison}
+                    className="gap-2"
+                    title="Comparar fotos seleccionadas lado a lado (2-4 fotos)"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Comparar ({selectedPhotos.length})
+                  </Button>
+                )}
+                
+                {selectedPhotos.length > 0 && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setShowBulkActions(!showBulkActions)}
+                    className="gap-2"
+                    title="Mostrar panel de acciones masivas para las fotos seleccionadas"
+                  >
+                    <Settings className="w-4 h-4" />
+                    Acciones masivas
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -546,12 +708,138 @@ export default function PhotoReviewSession() {
         </div>
       </div>
 
+      {/* Bulk Actions Panel */}
+      {selectedPhotos.length > 0 && showBulkActions && (
+        <div className="bg-secondary/50 border-b">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4 flex-wrap">
+                <span className="text-sm font-medium">
+                  Aplicar a {selectedPhotos.length} fotos seleccionadas (CTRL + Click):
+                </span>
+                <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
+                  💡 Teclas: 0-5 (rating), G/Y/R (etiquetas), F (favorita), ESC (limpiar)
+                </span>
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Rating:</span>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkRating(0)}
+                      className="gap-1 h-8 px-2"
+                      title="Sin calificación"
+                    >
+                      <X className="w-3 h-3 text-gray-400" />
+                      0
+                    </Button>
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Button
+                        key={rating}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => applyBulkRating(rating)}
+                        className="gap-1 h-8 px-2"
+                      >
+                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        {rating}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Etiqueta:</span>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkColorTag('green')}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                      Seleccionar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkColorTag('yellow')}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                      Revisar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkColorTag('red')}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <div className="w-3 h-3 rounded-full bg-red-500" />
+                      Descartar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkColorTag(null)}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <X className="w-3 h-3" />
+                      Quitar
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Favoritas:</span>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkFavorite(true)}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <Heart className="w-3 h-3 fill-red-500 text-red-500" />
+                      Marcar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyBulkFavorite(false)}
+                      className="gap-1 h-8 px-2"
+                    >
+                      <Heart className="w-3 h-3" />
+                      Quitar
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowBulkActions(false)}
+                className="gap-2"
+              >
+                <X className="w-4 h-4" />
+                Cerrar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         {viewMode === "grid" ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {filteredPhotos.map((photo, index) => (
-              <Card key={photo.id} className="group overflow-hidden hover:shadow-lg transition-shadow">
+              <Card key={photo.id} className={`group overflow-hidden hover:shadow-md transition-all ${
+                selectedPhotos.includes(photo.id) 
+                  ? 'ring-4 ring-white dark:ring-gray-300 ring-opacity-90 dark:ring-opacity-80 shadow-2xl shadow-gray-200/50 dark:shadow-gray-400/30 scale-[1.02] bg-white/80 dark:bg-gray-700/40' 
+                  : ''
+              }`}>
                 <CardContent className="p-0 relative">
                   <div className="aspect-[3/4] relative">
                     <Image
@@ -559,23 +847,28 @@ export default function PhotoReviewSession() {
                       alt={`Foto ${index + 1}`}
                       fill
                       className="object-cover cursor-pointer"
-                      onClick={() => {
-                        setSelectedPhoto(index);
-                        setShowSlideshow(true);
+                      onClick={(e) => {
+                        if (e.ctrlKey) {
+                          // CTRL + Click para selección múltiple
+                          e.preventDefault();
+                          togglePhotoSelection(photo.id);
+                        } else {
+                          // Click normal abre slideshow
+                          setSelectedPhoto(index);
+                          setShowSlideshow(true);
+                        }
                       }}
                     />
 
-                    {/* Overlay con controles */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 dark:group-hover:bg-black/40 transition-colors">
-                      <div className="absolute top-2 right-2 flex gap-1">
-                        {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
-                        {photo.colorTag && (
-                          <div
-                            className={`w-5 h-5 rounded-full ${colorTags.find((t) => t.value === photo.colorTag)?.color}`}
-                          />
-                        )}
-                        {photo.isReviewed && <Check className="w-5 h-5 fill-green-500 text-green-500" />}
-                      </div>
+                    {/* Indicadores sutiles */}
+                    <div className="absolute top-2 right-2 flex gap-1">
+                      {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
+                      {photo.colorTag && (
+                        <div
+                          className={`w-5 h-5 rounded-full ${colorTags.find((t) => t.value === photo.colorTag)?.color}`}
+                        />
+                      )}
+      
                     </div>
                   </div>
 
@@ -843,6 +1136,35 @@ export default function PhotoReviewSession() {
            isReviewed: photo.isReviewed
          }))}
       />
+
+      {/* Modal de Comparación */}
+      {showComparison && (
+        <PhotoComparison
+          photos={selectedPhotos.slice(0, 4).map(id => {
+            const photo = photos.find(p => p.id === id)!
+            return {
+              id: photo.id,
+              url: photo.url,
+              filename: `foto_${photo.id}.jpg`,
+              rating: photo.rating,
+              isFavorite: photo.isFavorite,
+              colorTag: photo.colorTag || undefined,
+              comments: photo.comments
+            }
+          })}
+          onClose={() => {
+            setShowComparison(false)
+            clearSelection()
+          }}
+          onUpdatePhoto={(photoId, updates) => {
+            setPhotos(prev => 
+              prev.map(photo => 
+                photo.id === photoId ? { ...photo, ...updates, isReviewed: true } : photo
+              )
+            )
+          }}
+        />
+      )}
     </div>
   )
 }

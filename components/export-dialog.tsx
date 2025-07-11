@@ -34,15 +34,15 @@ interface ExportDialogProps {
 }
 
 export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogProps) {
-  const [includeExtension, setIncludeExtension] = useState(true)
+  const [includeExtension, setIncludeExtension] = useState(false)
   const [changeExtension, setChangeExtension] = useState('')
-  const [outputFormat, setOutputFormat] = useState<'column' | 'text'>('column')
+  const [outputFormat, setOutputFormat] = useState<'column' | 'text'>('text')
   const [customFilename, setCustomFilename] = useState('')
-  const [exportType, setExportType] = useState<'excel' | 'txt' | 'copy'>('excel')
-  const [exportContent, setExportContent] = useState<'full' | 'filenames-only'>('full')
+  const [exportType, setExportType] = useState<'excel' | 'txt' | 'copy'>('copy')
+  const [exportContent, setExportContent] = useState<'full' | 'filenames-only'>('filenames-only')
   
   // Filtros avanzados
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([0, 1, 2, 3, 4, 5]) // Por defecto todas
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([5]) // Por defecto solo 5 estrellas
   const [includeFavorites, setIncludeFavorites] = useState<boolean | null>(null) // null = ambas, true = solo favoritas, false = solo no favoritas
   const [includeColorTags, setIncludeColorTags] = useState<{
     green: boolean    // Seleccionadas
@@ -103,11 +103,14 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
   }
 
   const resetFilters = () => {
-    setSelectedRatings([0, 1, 2, 3, 4, 5])
+    setSelectedRatings([5])
     setIncludeFavorites(null)
     setIncludeColorTags({ green: true, yellow: true, red: true, none: true })
     setIncludeReviewed(null)
-    setExportContent('full')
+    setExportContent('filenames-only')
+    setExportType('copy')
+    setOutputFormat('text')
+    setIncludeExtension(false)
   }
 
   const handleExport = async () => {
@@ -158,7 +161,7 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Exportar Fotos con Filtros Avanzados</DialogTitle>
+          <DialogTitle>Exportar Revisión con Filtros Avanzados</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -539,7 +542,7 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
                 <>
                   <p>• Información de la sesión</p>
                   <p>• Estadísticas generales</p>
-                  <p>• Se exportarán <strong>{filterPhotos().length} fotos</strong> de {photos.length} total</p>
+                  <p>• Se exportarán <strong>{filterPhotos().length} archivos</strong> de {photos.length} total</p>
                 </>
               ) : (
                 <>
@@ -601,7 +604,7 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
             onClick={handleExport} 
             className="gap-2"
             disabled={filterPhotos().length === 0}
-            title={filterPhotos().length === 0 ? 'No hay fotos que coincidan con los filtros' : ''}
+            title={filterPhotos().length === 0 ? 'No hay archivos que coincidan con los filtros' : ''}
           >
             {exportType === 'excel' ? <FileSpreadsheet className="w-4 h-4" /> :
              exportType === 'txt' ? <FileText className="w-4 h-4" /> :

@@ -101,28 +101,31 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
     }
   }
 
-  const gridCols = photos.length === 2 ? 'grid-cols-2' : 
-                   photos.length === 3 ? 'grid-cols-3' : 'grid-cols-2'
+  const getGridCols = () => {
+    if (photos.length === 2) return 'grid-cols-1 md:grid-cols-2'
+    if (photos.length === 3) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+    return 'grid-cols-1 md:grid-cols-2'
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <h2 className="text-xl font-semibold text-white">
-            Comparación de Fotos ({photos.length})
+      <div className="flex items-center justify-between p-2 md:p-4 bg-black/50 backdrop-blur-sm">
+        <div className="flex items-center gap-2 md:gap-4">
+          <h2 className="text-lg md:text-xl font-semibold text-white">
+            Comparación ({photos.length})
           </h2>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handleZoomOut}
               disabled={zoomLevel <= 0.1}
-              className="text-white border-white/20 hover:bg-white/10"
+              className="text-white border-white/20 hover:bg-white/10 p-2"
             >
-              <ZoomOut className="h-4 w-4" />
+              <ZoomOut className="h-3 w-3 md:h-4 md:w-4" />
             </Button>
-            <span className="text-white text-sm min-w-[4rem] text-center">
+            <span className="text-white text-xs md:text-sm min-w-[3rem] md:min-w-[4rem] text-center">
               {Math.round(zoomLevel * 100)}%
             </span>
             <Button
@@ -130,17 +133,17 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
               size="sm"
               onClick={handleZoomIn}
               disabled={zoomLevel >= 5}
-              className="text-white border-white/20 hover:bg-white/10"
+              className="text-white border-white/20 hover:bg-white/10 p-2"
             >
-              <ZoomIn className="h-4 w-4" />
+              <ZoomIn className="h-3 w-3 md:h-4 md:w-4" />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetZoom}
-              className="text-white border-white/20 hover:bg-white/10"
+              className="text-white border-white/20 hover:bg-white/10 p-2"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-3 w-3 md:h-4 md:w-4" />
             </Button>
           </div>
           {zoomLevel > 1 && (
@@ -161,9 +164,9 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
       </div>
 
       {/* Contenido Principal */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex flex-col lg:flex-row">
         {/* Grid de Fotos */}
-        <div className={`flex-1 grid ${gridCols} gap-2 p-4`}>
+        <div className={`flex-1 grid ${getGridCols()} gap-2 p-2 md:p-4`}>
           {photos.map((photo) => (
             <div
               key={photo.id}
@@ -246,7 +249,7 @@ export function PhotoComparison({ photos, onClose, onUpdatePhoto }: PhotoCompari
 
         {/* Panel lateral de edición */}
         {selectedPhoto && (
-          <div className="w-80 bg-black/50 backdrop-blur-sm border-l border-white/20 p-4">
+          <div className="w-full lg:w-80 bg-black/50 backdrop-blur-sm border-t lg:border-l lg:border-t-0 border-white/20 p-2 md:p-4 max-h-96 lg:max-h-none overflow-y-auto">
             <PhotoEditPanel
               photo={photos.find(p => p.id === selectedPhoto)!}
               onUpdate={(updates) => onUpdatePhoto(selectedPhoto, updates)}
