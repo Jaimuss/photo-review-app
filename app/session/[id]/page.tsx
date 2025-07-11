@@ -348,13 +348,11 @@ export default function PhotoReviewSession() {
   const applyBulkRating = async (rating: number) => {
     const promises = selectedPhotos.map(photoId => updatePhotoRating(photoId, rating))
     await Promise.all(promises)
-    clearSelection()
   }
 
   const applyBulkColorTag = async (colorTag: string | null) => {
     const promises = selectedPhotos.map(photoId => updatePhotoColorTag(photoId, colorTag))
     await Promise.all(promises)
-    clearSelection()
   }
 
   const applyBulkFavorite = async (isFavorite: boolean) => {
@@ -378,7 +376,6 @@ export default function PhotoReviewSession() {
     })
     
     await Promise.all(promises)
-    clearSelection()
   }
 
   const handleUpdatePhotoInComparison = async (photoId: string, updates: any) => {
