@@ -1654,8 +1654,9 @@
     "review-photo-session-1752228283162-1752228295570-2": {
       "id": "review-photo-session-1752228283162-1752228295570-2",
       "photoId": "photo-session-1752228283162-1752228295570-2",
-      "rating": 3,
-      "updatedAt": 1752228296125
+      "rating": 5,
+      "updatedAt": 1752238310534,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-3": {
       "id": "review-photo-session-1752228283162-1752228295570-3",
@@ -1672,8 +1673,9 @@
     "review-photo-session-1752228283162-1752228295570-5": {
       "id": "review-photo-session-1752228283162-1752228295570-5",
       "photoId": "photo-session-1752228283162-1752228295570-5",
-      "rating": 3,
-      "updatedAt": 1752228296720
+      "rating": 5,
+      "updatedAt": 1752238318448,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-6": {
       "id": "review-photo-session-1752228283162-1752228295570-6",
@@ -1702,8 +1704,9 @@
     "review-photo-session-1752228283162-1752228295570-10": {
       "id": "review-photo-session-1752228283162-1752228295570-10",
       "photoId": "photo-session-1752228283162-1752228295570-10",
-      "rating": 3,
-      "updatedAt": 1752228297990
+      "rating": 5,
+      "updatedAt": 1752238321037,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-11": {
       "id": "review-photo-session-1752228283162-1752228295570-11",
