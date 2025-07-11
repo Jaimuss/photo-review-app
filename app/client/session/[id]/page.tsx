@@ -334,9 +334,8 @@ export default function PhotoReviewSession() {
 
   // Funciones para selección por área con el ratón
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Solo iniciar drag selection si no se hizo clic en una foto o botón
-    if ((e.target as HTMLElement).closest('[data-photo-card]') || 
-        (e.target as HTMLElement).closest('button') ||
+    // Solo bloquear si se hizo clic en un botón (permitir drag desde fotos)
+    if ((e.target as HTMLElement).closest('button') ||
         (e.target as HTMLElement).closest('[role="button"]')) {
       return
     }
@@ -961,13 +960,18 @@ export default function PhotoReviewSession() {
                       alt={`Foto ${index + 1}`}
                       fill
                       className="object-cover cursor-pointer"
-                      onClick={(e) => {
+                      onMouseDown={(e) => {
                         if (e.ctrlKey) {
-                          // CTRL + Click para selección múltiple
+                          // CTRL + Click para selección múltiple - evitar propagación
+                          e.stopPropagation();
                           e.preventDefault();
                           togglePhotoSelection(photo.id);
-                        } else {
-                          // Click normal abre slideshow
+                        }
+                        // Para drag selection, dejamos que se propague al grid
+                      }}
+                      onClick={(e) => {
+                        // Solo abrir slideshow si no se está dragging y no es CTRL+click
+                        if (!isDragging && !e.ctrlKey) {
                           setSelectedPhoto(index);
                           setShowSlideshow(true);
                         }
