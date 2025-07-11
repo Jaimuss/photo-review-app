@@ -1667,8 +1667,9 @@
     "review-photo-session-1752228283162-1752228295570-4": {
       "id": "review-photo-session-1752228283162-1752228295570-4",
       "photoId": "photo-session-1752228283162-1752228295570-4",
-      "rating": 3,
-      "updatedAt": 1752228296341
+      "rating": 5,
+      "updatedAt": 1752238673769,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-5": {
       "id": "review-photo-session-1752228283162-1752228295570-5",
@@ -1680,14 +1681,16 @@
     "review-photo-session-1752228283162-1752228295570-6": {
       "id": "review-photo-session-1752228283162-1752228295570-6",
       "photoId": "photo-session-1752228283162-1752228295570-6",
-      "rating": 3,
-      "updatedAt": 1752228297041
+      "rating": 5,
+      "updatedAt": 1752238677018,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-7": {
       "id": "review-photo-session-1752228283162-1752228295570-7",
       "photoId": "photo-session-1752228283162-1752228295570-7",
-      "rating": 3,
-      "updatedAt": 1752228297221
+      "rating": 5,
+      "updatedAt": 1752238678903,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-8": {
       "id": "review-photo-session-1752228283162-1752228295570-8",

@@ -2,6 +2,7 @@ interface ExportOptions {
   includeExtension: boolean
   changeExtension?: string
   outputFormat: 'column' | 'text' // columna separada o texto separado por espacios
+  exportContent: 'full' | 'filenames-only' // contenido completo o solo nombres de archivos
 }
 
 interface Photo {
@@ -46,12 +47,30 @@ export function generateExcelData(
   photos: Photo[],
   options: ExportOptions
 ) {
+  const data = []
+
+  // Si solo se quieren los nombres de archivos, retornar solo eso
+  if (options.exportContent === 'filenames-only') {
+    if (options.outputFormat === 'column') {
+      // Una columna con todos los nombres
+      photos.forEach(photo => {
+        data.push([formatFilename(photo.filename || photo.id, options)])
+      })
+    } else {
+      // Una sola línea con todos los nombres separados por espacios
+      const filenames = photos.map(photo => 
+        formatFilename(photo.filename || photo.id, options)
+      ).join(' ')
+      data.push([filenames])
+    }
+    return data
+  }
+
+  // Contenido completo (lógica original)
   const selectedPhotos = photos.filter(p => p.colorTag === 'green')
   const favoritePhotos = photos.filter(p => p.isFavorite)
   const reviewPhotos = photos.filter(p => p.colorTag === 'yellow')
   const discardPhotos = photos.filter(p => p.colorTag === 'red')
-  
-  const data = []
   
   // Información de la sesión
   data.push(['REPORTE DE SESIÓN FOTOGRÁFICA'])

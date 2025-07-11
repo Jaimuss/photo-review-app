@@ -39,6 +39,7 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
   const [outputFormat, setOutputFormat] = useState<'column' | 'text'>('column')
   const [customFilename, setCustomFilename] = useState('')
   const [exportType, setExportType] = useState<'excel' | 'txt' | 'copy'>('excel')
+  const [exportContent, setExportContent] = useState<'full' | 'filenames-only'>('full')
   
   // Filtros avanzados
   const [selectedRatings, setSelectedRatings] = useState<number[]>([0, 1, 2, 3, 4, 5]) // Por defecto todas
@@ -106,6 +107,7 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
     setIncludeFavorites(null)
     setIncludeColorTags({ green: true, yellow: true, red: true, none: true })
     setIncludeReviewed(null)
+    setExportContent('full')
   }
 
   const handleExport = async () => {
@@ -114,7 +116,8 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
     const options = {
       includeExtension,
       changeExtension: changeExtension || undefined,
-      outputFormat
+      outputFormat,
+      exportContent
     }
 
     const data = generateExcelData(session, filteredPhotos, options)
@@ -182,6 +185,27 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
                 <Label htmlFor="copy" className="flex items-center gap-2">
                   <Copy className="w-4 h-4" />
                   Copiar al portapapeles
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          {/* Contenido de exportación */}
+          <div className="space-y-3">
+            <Label>Contenido a exportar</Label>
+            <RadioGroup value={exportContent} onValueChange={(value: 'full' | 'filenames-only') => setExportContent(value)}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="full" id="content-full" />
+                <Label htmlFor="content-full" className="flex flex-col">
+                  <span className="font-medium">Reporte completo</span>
+                  <span className="text-xs text-muted-foreground">Incluye información de sesión, estadísticas y detalles de fotos</span>
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="filenames-only" id="content-filenames" />
+                <Label htmlFor="content-filenames" className="flex flex-col">
+                  <span className="font-medium">🎯 Solo nombres de archivos</span>
+                  <span className="text-xs text-muted-foreground">Únicamente la lista de nombres de las fotos filtradas</span>
                 </Label>
               </div>
             </RadioGroup>
@@ -486,14 +510,24 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="column">Columnas separadas (recomendado)</SelectItem>
-                <SelectItem value="text">Texto separado por espacios</SelectItem>
+                <SelectItem value="column">
+                  {exportContent === 'filenames-only' ? 'Una columna (un archivo por fila)' : 'Columnas separadas (recomendado)'}
+                </SelectItem>
+                <SelectItem value="text">
+                  {exportContent === 'filenames-only' ? 'Una línea (separados por espacios)' : 'Texto separado por espacios'}
+                </SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              {outputFormat === 'column' 
-                ? 'Cada dato en una columna separada, fácil de filtrar' 
-                : 'Nombres de archivos en una sola celda separados por espacios'}
+              {exportContent === 'filenames-only' ? (
+                outputFormat === 'column' 
+                  ? 'Cada nombre de archivo en una fila separada' 
+                  : 'Todos los nombres en una sola línea separados por espacios'
+              ) : (
+                outputFormat === 'column' 
+                  ? 'Cada dato en una columna separada, fácil de filtrar' 
+                  : 'Nombres de archivos en una sola celda separados por espacios'
+              )}
             </p>
           </div>
 
@@ -501,9 +535,19 @@ export function ExportDialog({ isOpen, onClose, session, photos }: ExportDialogP
           <div className="bg-muted p-3 rounded-lg">
             <p className="text-sm font-medium mb-2">Vista previa:</p>
             <div className="text-xs space-y-1">
-              <p>• Información de la sesión</p>
-              <p>• Estadísticas generales</p>
-              <p>• Se exportarán <strong>{filterPhotos().length} fotos</strong> de {photos.length} total</p>
+              {exportContent === 'full' ? (
+                <>
+                  <p>• Información de la sesión</p>
+                  <p>• Estadísticas generales</p>
+                  <p>• Se exportarán <strong>{filterPhotos().length} fotos</strong> de {photos.length} total</p>
+                </>
+              ) : (
+                <>
+                  <p>🎯 <strong>Solo nombres de archivos</strong></p>
+                  <p>• Se exportarán <strong>{filterPhotos().length} nombres</strong> de {photos.length} total</p>
+                  <p>• Sin información de sesión ni estadísticas</p>
+                </>
+              )}
               
               {/* Mostrar filtros activos solo si no son los predeterminados */}
               {(selectedRatings.length < 6 || 
