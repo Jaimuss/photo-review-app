@@ -949,10 +949,10 @@ export default function PhotoReviewSession() {
                 key={photo.id} 
                 data-photo-card
                 data-photo-id={photo.id}
-                className={`group overflow-hidden hover:shadow-md transition-all ${
+                className={`group overflow-hidden transition-all ${
                   selectedPhotos.includes(photo.id) 
                     ? 'ring-4 ring-white dark:ring-gray-300 ring-opacity-90 dark:ring-opacity-80 shadow-2xl shadow-gray-200/50 dark:shadow-gray-400/30 scale-[1.02] bg-white/80 dark:bg-gray-700/40' 
-                    : ''
+                    : 'hover:ring-2 hover:ring-white/70 dark:hover:ring-gray-300/60 hover:shadow-xl hover:shadow-gray-200/30 dark:hover:shadow-gray-400/20 hover:scale-[1.01] hover:bg-white/40 dark:hover:bg-gray-700/20'
                 }`}>
                 <CardContent className="p-0 relative">
                   <div className="aspect-[3/4] relative">
