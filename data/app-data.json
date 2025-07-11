@@ -1679,24 +1679,24 @@
     "review-photo-session-1752228283162-1752228295570-5": {
       "id": "review-photo-session-1752228283162-1752228295570-5",
       "photoId": "photo-session-1752228283162-1752228295570-5",
-      "rating": 3,
-      "updatedAt": 1752241955565,
+      "rating": 5,
+      "updatedAt": 1752241990523,
       "isReviewed": true,
       "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-6": {
       "id": "review-photo-session-1752228283162-1752228295570-6",
       "photoId": "photo-session-1752228283162-1752228295570-6",
-      "rating": 3,
-      "updatedAt": 1752241955565,
+      "rating": 5,
+      "updatedAt": 1752241990522,
       "isReviewed": true,
       "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-7": {
       "id": "review-photo-session-1752228283162-1752228295570-7",
       "photoId": "photo-session-1752228283162-1752228295570-7",
-      "rating": 3,
-      "updatedAt": 1752241955559,
+      "rating": 5,
+      "updatedAt": 1752241990513,
       "isReviewed": true
     },
     "review-photo-session-1752228283162-1752228295570-8": {

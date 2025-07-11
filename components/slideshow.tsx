@@ -258,7 +258,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-full max-h-full p-0 bg-black">
+      <DialogContent className="max-w-full max-h-full p-0 bg-background">
         <VisuallyHidden.Root>
           <DialogTitle>Slideshow de Fotos</DialogTitle>
         </VisuallyHidden.Root>
@@ -284,15 +284,15 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
             showControls ? 'opacity-100' : 'opacity-0'
           }`}>
             {/* Header */}
-            <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-6 z-50">
-              <div className="flex justify-between items-center text-white">
+            <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 dark:from-black/50 to-transparent p-6 z-50">
+              <div className="flex justify-between items-center text-white dark:text-white">
                 <div>
                   <h2 className="text-xl font-semibold">Slideshow</h2>
                   <p className="text-sm opacity-75">
                     {validIndex + 1} de {photos.length}
                   </p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/20 z-50">
+                <Button variant="ghost" size="icon" onClick={onClose} className="text-white dark:text-white hover:bg-white/20 dark:hover:bg-white/20 z-50">
                   <X className="w-6 h-6" />
                 </Button>
               </div>
@@ -304,7 +304,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                 variant="ghost" 
                 size="icon" 
                 onClick={prevPhoto}
-                className="text-white bg-black/20 hover:bg-black/40"
+                className="text-white dark:text-white bg-black/20 dark:bg-black/20 hover:bg-black/40 dark:hover:bg-black/40"
               >
                 <SkipBack className="w-6 h-6" />
               </Button>
@@ -315,28 +315,28 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                 variant="ghost" 
                 size="icon" 
                 onClick={nextPhoto}
-                className="text-white bg-black/20 hover:bg-black/40"
+                className="text-white dark:text-white bg-black/20 dark:bg-black/20 hover:bg-black/40 dark:hover:bg-black/40"
               >
                 <SkipForward className="w-6 h-6" />
               </Button>
             </div>
 
             {/* Controles inferiores */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-6">
-              <div className="flex items-center justify-center gap-4 text-white mb-4">
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="text-white hover:bg-white/20"
-                >
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 dark:from-black/50 to-transparent p-6">
+              <div className="flex items-center justify-center gap-4 text-white dark:text-white mb-4">
+                                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    className="text-white dark:text-white hover:bg-white/20 dark:hover:bg-white/20"
+                  >
                   {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
                 </Button>
 
                 <div className="flex items-center gap-4">
                   <span className="text-sm">Velocidad:</span>
                   <Select value={speed.toString()} onValueChange={(value) => setSpeed(Number(value))}>
-                    <SelectTrigger className="w-32 bg-black/20 border-white/20 text-white">
+                    <SelectTrigger className="w-32 bg-background/20 dark:bg-black/20 border-border dark:border-white/20 text-foreground dark:text-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -351,7 +351,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                 <div className="flex items-center gap-4">
                   <span className="text-sm">Transición:</span>
                   <Select value={transition} onValueChange={setTransition}>
-                    <SelectTrigger className="w-32 bg-black/20 border-white/20 text-white">
+                    <SelectTrigger className="w-32 bg-background/20 dark:bg-black/20 border-border dark:border-white/20 text-foreground dark:text-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -378,7 +378,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
           </div>
 
           {/* Información de la foto - Siempre visible de forma discreta */}
-          <div className="absolute top-20 right-6 bg-black/60 text-white p-3 rounded-lg max-w-sm transition-all duration-300 hover:bg-black/90 hover:scale-105 z-40">
+          <div className="absolute top-20 right-6 bg-white/95 dark:bg-black/60 text-foreground dark:text-white p-3 rounded-lg max-w-sm transition-all duration-300 hover:bg-white dark:hover:bg-black/90 hover:scale-105 z-40 shadow-lg border border-border dark:border-transparent">
             <div className="space-y-3">
               {/* Rating interactivo */}
               <div className="space-y-1">
@@ -413,7 +413,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                   className={`flex items-center gap-2 px-2 py-1 rounded transition-colors ${
                     currentPhoto.isFavorite 
                       ? 'bg-red-500/20 text-red-400' 
-                      : 'bg-gray-500/20 text-gray-400 hover:bg-gray-400/20'
+                      : 'bg-muted dark:bg-gray-500/20 text-muted-foreground dark:text-gray-400 hover:bg-muted/80 dark:hover:bg-gray-400/20'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${currentPhoto.isFavorite ? 'fill-current' : ''}`} />
@@ -438,7 +438,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                         }
                       }}
                       placeholder="Agregar comentario..."
-                      className="bg-black/50 border-gray-600 text-white text-sm resize-none"
+                      className="bg-white dark:bg-black/50 border-input dark:border-gray-600 text-foreground dark:text-white text-sm resize-none"
                       rows={3}
                       autoFocus
                     />
@@ -446,7 +446,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                       <Button 
                         size="sm" 
                         onClick={saveComment}
-                        className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1"
+                        className="bg-green-600 hover:bg-green-700 text-white dark:text-white text-xs px-2 py-1"
                       >
                         Guardar (Enter)
                       </Button>
@@ -463,7 +463,7 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                 ) : (
                   <button
                     onClick={startEditingComment}
-                    className="w-full text-left p-2 rounded bg-gray-500/20 hover:bg-gray-400/20 transition-colors"
+                    className="w-full text-left p-2 rounded bg-muted dark:bg-gray-500/20 hover:bg-muted/80 dark:hover:bg-gray-400/20 transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" />
