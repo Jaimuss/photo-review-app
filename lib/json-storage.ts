@@ -143,7 +143,7 @@ class JSONStorage {
         filename: photo.filename,
         url: photo.originalUrl,
         uploadOrder: photo.uploadOrder,
-        rating: review.rating || 3,
+        rating: review.rating ?? 0, // Base 0 estrellas
         colorTag: review.colorTag || null,
         comments: review.comment || '',
         isFavorite: review.isFavorite || false,

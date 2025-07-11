@@ -207,16 +207,16 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
       case 'C':
         startEditingComment()
         break
-      case 'g':
-      case 'G':
+      case 's':
+      case 'S':
         setColorTag('green')
-        break
-      case 'y':
-      case 'Y':
-        setColorTag('yellow')
         break
       case 'r':
       case 'R':
+        setColorTag('yellow')
+        break
+      case 'd':
+      case 'D':
         setColorTag('red')
         break
       case 'n':
@@ -431,6 +431,12 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
                     <Textarea
                       value={tempComment}
                       onChange={(e) => setTempComment(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          saveComment()
+                        }
+                      }}
                       placeholder="Agregar comentario..."
                       className="bg-black/50 border-gray-600 text-white text-sm resize-none"
                       rows={3}
@@ -470,27 +476,29 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
               </div>
               
               {/* Etiquetas de color interactivas */}
-              <div className="space-y-1">
-                <span className="text-sm font-medium">Etiquetas (G/Y/R/N):</span>
-                <div className="flex gap-2">
+              <div className="space-y-2">
+                <span className="text-sm font-medium">Etiqueta de color:</span>
+                <div className="space-y-1">
                   {[
-                    { key: 'green', color: '#22c55e', label: 'G' },
-                    { key: 'yellow', color: '#eab308', label: 'Y' },
-                    { key: 'red', color: '#ef4444', label: 'R' },
-                    { key: '', color: '#6b7280', label: 'N' }
+                    { key: null, label: 'Sin etiqueta (N)', color: 'bg-gray-500' },
+                    { key: 'green', label: 'Seleccionar (S)', color: 'bg-green-500' },
+                    { key: 'yellow', label: 'Revisar (R)', color: 'bg-yellow-500' },
+                    { key: 'red', label: 'Descartar (D)', color: 'bg-red-500' }
                   ].map((tag) => (
                     <button
-                      key={tag.key}
+                      key={tag.key || 'none'}
                       onClick={() => setColorTag(tag.key)}
-                      className={`w-8 h-8 rounded-full transition-all hover:scale-110 border-2 ${
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-all ${
                         currentPhoto.colorTag === tag.key 
-                          ? 'border-white shadow-lg' 
-                          : 'border-gray-400 hover:border-white'
+                          ? `${tag.color} text-white shadow-lg` 
+                          : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
                       }`}
-                      style={{ backgroundColor: tag.color }}
-                      title={`Etiqueta ${tag.label === 'N' ? 'Ninguna' : tag.label}`}
                     >
-                      <span className="text-white text-xs font-bold">{tag.label}</span>
+                      <div className={`w-3 h-3 rounded-full ${tag.color}`} />
+                      {tag.label}
+                      {currentPhoto.colorTag === tag.key && (
+                        <span className="ml-auto text-xs">✓</span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -513,13 +521,14 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
               <div className="border-t border-gray-600 pt-2 mt-2">
                 <div className="text-green-400 font-medium mb-1">🎯 Edición rápida:</div>
                 <div className="grid grid-cols-2 gap-1">
+                  <div>0: Quitar rating</div>
                   <div>1-5: Rating</div>
                   <div>F: Favorito</div>
                   <div>C: Comentario</div>
-                  <div>G: Verde</div>
-                  <div>Y: Amarillo</div>
-                  <div>R: Rojo</div>
-                  <div>N: Sin color</div>
+                  <div>S: Seleccionar</div>
+                  <div>R: Revisar</div>
+                  <div>D: Descartar</div>
+                  <div>N: Sin etiqueta</div>
                 </div>
               </div>
             </div>

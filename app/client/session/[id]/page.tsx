@@ -559,8 +559,7 @@ export default function PhotoReviewSession() {
                       alt={`Foto ${index + 1}`}
                       fill
                       className="object-cover cursor-pointer"
-                      onClick={() => setSelectedPhoto(index)}
-                      onDoubleClick={() => {
+                      onClick={() => {
                         setSelectedPhoto(index);
                         setShowSlideshow(true);
                       }}

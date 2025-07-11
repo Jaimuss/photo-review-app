@@ -9,8 +9,8 @@ import {
   Eye,
   MessageSquare,
   Download,
-  ArrowLeft,
-  ArrowRight,
+  Maximize2,
+  Minimize2,
   X,
   Check,
   Copy,
@@ -21,13 +21,14 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { useParams } from "next/navigation"
 import { PhotoComparison } from "@/components/photo-comparison"
 import { Slideshow } from "@/components/slideshow"
 import { ExportDialog } from "@/components/export-dialog"
+import { ModeToggle } from "@/components/mode-toggle"
 
 // Mock data - now loaded from API
 // const sessionData = { ... }
@@ -53,6 +54,8 @@ export default function PhotoReviewSession() {
   const [showComparison, setShowComparison] = useState(false)
   const [showSlideshow, setShowSlideshow] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
+  const [isFullWidth, setIsFullWidth] = useState(false)
+  const [gridColumns, setGridColumns] = useState(4)
   const { id: sessionId } = useParams()
 
   useEffect(() => {
@@ -106,24 +109,109 @@ export default function PhotoReviewSession() {
     }
   }
 
-  const updatePhotoRating = (photoId: string, rating: number) => {
+  const updatePhotoRating = async (photoId: string, rating: number) => {
+    // Actualizar estado local inmediatamente para feedback
     setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, rating, isReviewed: true } : photo)))
+    
+    // Enviar a la API
+    try {
+      const response = await fetch('/api/photos/rating', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoId, rating })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Error al actualizar rating')
+      }
+      
+      console.log(`Rating actualizado para foto ${photoId}: ${rating} estrellas`)
+    } catch (error) {
+      console.error('Error al actualizar rating:', error)
+      // Revertir cambio local si falla la API
+      setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, rating: photo.rating } : photo)))
+    }
   }
 
-  const updatePhotoColorTag = (photoId: string, colorTag: string | null) => {
+  const updatePhotoColorTag = async (photoId: string, colorTag: string | null) => {
+    // Actualizar estado local inmediatamente para feedback
     setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, colorTag, isReviewed: true } : photo)))
+    
+    // Enviar a la API
+    try {
+      const response = await fetch('/api/photos/color-tag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoId, colorTag })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Error al actualizar etiqueta de color')
+      }
+      
+      console.log(`Etiqueta de color actualizada para foto ${photoId}: ${colorTag}`)
+    } catch (error) {
+      console.error('Error al actualizar etiqueta de color:', error)
+      // Revertir cambio local si falla la API
+      setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, colorTag: photo.colorTag } : photo)))
+    }
   }
 
-  const updatePhotoComment = (photoId: string, comment: string) => {
+  const updatePhotoComment = async (photoId: string, comment: string) => {
+    // Actualizar estado local inmediatamente para feedback
     setPhotos((prev) =>
       prev.map((photo) => (photo.id === photoId ? { ...photo, comments: comment, isReviewed: true } : photo)),
     )
+    
+    // Enviar a la API
+    try {
+      const response = await fetch('/api/photos/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoId, comment })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Error al actualizar comentario')
+      }
+      
+      console.log(`Comentario actualizado para foto ${photoId}: ${comment}`)
+    } catch (error) {
+      console.error('Error al actualizar comentario:', error)
+      // Revertir cambio local si falla la API
+      setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, comments: photo.comments } : photo)))
+    }
   }
 
-  const toggleFavorite = (photoId: string) => {
+  const toggleFavorite = async (photoId: string) => {
+    // Actualizar estado local inmediatamente para feedback
+    const updatedPhotos = [...photos]
+    const photoIndex = updatedPhotos.findIndex(p => p.id === photoId)
+    const currentIsFavorite = updatedPhotos[photoIndex]?.isFavorite || false
+    const newIsFavorite = !currentIsFavorite
+    
     setPhotos((prev) =>
-      prev.map((photo) => (photo.id === photoId ? { ...photo, isFavorite: !photo.isFavorite } : photo)),
+      prev.map((photo) => (photo.id === photoId ? { ...photo, isFavorite: newIsFavorite } : photo)),
     )
+    
+    // Enviar a la API
+    try {
+      const response = await fetch('/api/photos/favorite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoId, isFavorite: newIsFavorite })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Error al actualizar favorito')
+      }
+      
+      console.log(`Favorito actualizado para foto ${photoId}: ${newIsFavorite}`)
+    } catch (error) {
+      console.error('Error al actualizar favorito:', error)
+      // Revertir cambio local si falla la API
+      setPhotos((prev) => prev.map((photo) => (photo.id === photoId ? { ...photo, isFavorite: currentIsFavorite } : photo)))
+    }
   }
 
   const toggleComparisonSelection = (photoId: string) => {
@@ -143,10 +231,78 @@ export default function PhotoReviewSession() {
     }
   }
 
-  const handleUpdatePhotoInComparison = (photoId: string, updates: any) => {
+  const handleUpdatePhotoInComparison = async (photoId: string, updates: any) => {
+    // Actualizar estado local inmediatamente para feedback
     setPhotos(prev => prev.map(photo => 
       photo.id === photoId ? { ...photo, ...updates, isReviewed: true } : photo
     ))
+    
+    // Enviar actualizaciones a la API
+    try {
+      const promises = []
+      
+      // Actualizar rating si está presente
+      if (updates.rating !== undefined) {
+        promises.push(
+          fetch('/api/photos/rating', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ photoId, rating: updates.rating })
+          })
+        )
+      }
+      
+      // Actualizar colorTag si está presente
+      if (updates.colorTag !== undefined) {
+        promises.push(
+          fetch('/api/photos/color-tag', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ photoId, colorTag: updates.colorTag })
+          })
+        )
+      }
+      
+      // Actualizar comentarios si están presentes
+      if (updates.comments !== undefined) {
+        promises.push(
+          fetch('/api/photos/comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ photoId, comment: updates.comments })
+          })
+        )
+      }
+      
+      // Actualizar favorito si está presente
+      if (updates.isFavorite !== undefined) {
+        promises.push(
+          fetch('/api/photos/favorite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ photoId, isFavorite: updates.isFavorite })
+          })
+        )
+      }
+      
+      // Ejecutar todas las peticiones
+      const responses = await Promise.all(promises)
+      
+      // Verificar que todas las peticiones fueron exitosas
+      responses.forEach(response => {
+        if (!response.ok) {
+          throw new Error(`Error en petición: ${response.status}`)
+        }
+      })
+      
+      console.log(`Foto actualizada exitosamente: ${photoId}`, updates)
+    } catch (error) {
+      console.error('Error al actualizar foto:', error)
+      // Revertir cambios si fallan las peticiones
+      setPhotos(prev => prev.map(photo => 
+        photo.id === photoId ? { ...photo, ...updates, isReviewed: photo.isReviewed } : photo
+      ))
+    }
   }
 
   const filteredPhotos = photos.filter((photo) => {
@@ -219,22 +375,27 @@ export default function PhotoReviewSession() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-40">
+      <div className="bg-background border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {sessionData?.location || 'Sesión fotográfica'}
-              </h1>
-              <p className="text-gray-600">
-                Cliente: {sessionData?.clientName || 'Cliente'} • {sessionData?.date || 'Fecha'}
-              </p>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold">
+                  {sessionData?.location || 'Sesión fotográfica'}
+                </h1>
+                <p className="text-muted-foreground">
+                  Cliente: {sessionData?.clientName || 'Cliente'} • {sessionData?.date || 'Fecha'}
+                </p>
+              </div>
+              <div className="lg:hidden">
+                <ModeToggle />
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Progreso de revisión</p>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+              <div className="text-left lg:text-right">
+                <p className="text-sm text-muted-foreground">Progreso de revisión</p>
                 <div className="flex items-center gap-2">
                   <Progress value={progressPercentage} className="w-32" />
                   <span className="text-sm font-medium">
@@ -242,17 +403,22 @@ export default function PhotoReviewSession() {
                   </span>
                 </div>
               </div>
-              <Button variant="outline" className="gap-2">
-                <Download className="w-4 h-4" />
-                Exportar Reporte
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
+                  <Download className="w-4 h-4" />
+                  Exportar Excel
+                </Button>
+                <div className="hidden lg:block">
+                  <ModeToggle />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="bg-white border-b">
+      <div className="bg-background border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -309,10 +475,38 @@ export default function PhotoReviewSession() {
                   <Download className="w-4 h-4" />
                   Exportar Excel
                 </Button>
+                
+                <Button
+                  variant={isFullWidth ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setIsFullWidth(!isFullWidth)}
+                  className="gap-2"
+                  title={isFullWidth ? "Vista compacta" : "Ancho completo"}
+                >
+                  {isFullWidth ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  {isFullWidth ? "Compacto" : "Completo"}
+                </Button>
               </div>
 
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-gray-500" />
+                <Grid3X3 className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Columnas:</span>
+                <Select value={gridColumns.toString()} onValueChange={(value) => setGridColumns(Number(value))}>
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((cols) => (
+                      <SelectItem key={cols} value={cols.toString()}>
+                        {cols}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                                  </Select>
+                
+                <div className="h-4 w-px bg-border mx-2" />
+                
+                <Filter className="w-4 h-4 text-muted-foreground" />
                 <Select value={filterRating} onValueChange={setFilterRating}>
                   <SelectTrigger className="w-32">
                     <SelectValue placeholder="Rating" />
@@ -342,7 +536,7 @@ export default function PhotoReviewSession() {
               </div>
             </div>
 
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               Mostrando {filteredPhotos.length} de {photos.length} fotos
             </div>
           </div>
@@ -350,29 +544,33 @@ export default function PhotoReviewSession() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className={`${isFullWidth ? 'w-full' : 'max-w-7xl'} mx-auto px-4 py-6`}>
         {viewMode === "grid" ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div 
+            className="grid gap-4"
+            style={{ 
+              gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` 
+            }}
+          >
             {filteredPhotos.map((photo, index) => (
               <Card key={photo.id} className="group overflow-hidden hover:shadow-lg transition-shadow">
                 <CardContent className="p-0 relative">
-                  <div className="relative">
+                  {/* Contenedor de imagen con aspect ratio fijo */}
+                  <div className="aspect-[4/3] relative bg-muted/20 rounded-t-lg">
                     <Image
                       src={photo.url || "/placeholder.svg"}
                       alt={`Foto ${index + 1}`}
-                      width={300}
-                      height={400}
-                      className="w-full h-auto object-contain cursor-pointer"
-                      onClick={() => setSelectedPhoto(index)}
-                      onDoubleClick={() => {
+                      fill
+                      className="object-contain cursor-pointer"
+                      onClick={() => {
                         setSelectedPhoto(index);
                         setShowSlideshow(true);
                       }}
                     />
 
                     {/* Overlay con controles */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors">
-                      <div className="absolute top-2 left-2">
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 dark:group-hover:bg-black/40 transition-colors pointer-events-none">
+                      <div className="absolute top-2 left-2 pointer-events-auto">
                         <input
                           type="checkbox"
                           checked={selectedForComparison.includes(photo.id)}
@@ -380,7 +578,7 @@ export default function PhotoReviewSession() {
                           className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
                         />
                       </div>
-                      <div className="absolute top-2 right-2 flex gap-1">
+                      <div className="absolute top-2 right-2 flex gap-1 pointer-events-auto">
                         {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
                         {photo.colorTag && (
                           <div
@@ -392,7 +590,7 @@ export default function PhotoReviewSession() {
                     </div>
                   </div>
 
-                  {/* Rating y controles */}
+                  {/* Rating y controles - siempre debajo */}
                   <div className="p-3 space-y-2">
                     <StarRating
                       rating={photo.rating}
@@ -403,11 +601,14 @@ export default function PhotoReviewSession() {
                     <div className="flex items-center justify-between">
                       <Button variant="ghost" size="sm" onClick={() => toggleFavorite(photo.id)} className="p-1">
                         <Heart
-                          className={`w-4 h-4 ${photo.isFavorite ? "fill-red-500 text-red-500" : "text-gray-400"}`}
+                          className={`w-4 h-4 ${photo.isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground"}`}
                         />
                       </Button>
 
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedPhoto(index)} className="p-1">
+                      <Button variant="ghost" size="sm" onClick={() => {
+                        setSelectedPhoto(index);
+                        setShowSlideshow(true);
+                      }} className="p-1">
                         <MessageSquare className="w-4 h-4" />
                       </Button>
                     </div>
@@ -429,7 +630,7 @@ export default function PhotoReviewSession() {
                         width={400}
                         height={600}
                         className="w-full h-auto object-contain rounded-lg cursor-pointer"
-                        onDoubleClick={() => {
+                        onClick={() => {
                           setSelectedPhoto(index);
                           setShowSlideshow(true);
                         }}
@@ -442,7 +643,7 @@ export default function PhotoReviewSession() {
 
                         <div className="space-y-4">
                           <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">Calificación</label>
+                            <label className="text-sm font-medium mb-2 block">Calificación</label>
                             <StarRating
                               rating={photo.rating}
                               onRatingChange={(rating) => updatePhotoRating(photo.id, rating)}
@@ -450,7 +651,7 @@ export default function PhotoReviewSession() {
                           </div>
 
                           <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">Etiqueta de color</label>
+                            <label className="text-sm font-medium mb-2 block">Etiqueta de color</label>
                             <ColorTagSelector
                               currentTag={photo.colorTag}
                               onTagChange={(tag) => updatePhotoColorTag(photo.id, tag)}
@@ -458,7 +659,7 @@ export default function PhotoReviewSession() {
                           </div>
 
                           <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
+                            <label className="text-sm font-medium mb-2 block">
                               Comentarios para el retocador
                             </label>
                             <Textarea
@@ -490,97 +691,7 @@ export default function PhotoReviewSession() {
         )}
       </div>
 
-      {/* Modal para vista individual */}
-      <Dialog open={selectedPhoto !== null} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-6xl max-h-[90vh] p-0">
-          {selectedPhoto !== null && (
-            <div className="grid lg:grid-cols-3 h-full">
-              <div className="lg:col-span-2 relative bg-black">
-                <Image
-                  src={filteredPhotos[selectedPhoto].url || "/placeholder.svg"}
-                  alt={`Foto ${selectedPhoto + 1}`}
-                  fill
-                  className="object-contain"
-                />
 
-                {/* Navegación */}
-                <div className="absolute inset-y-0 left-4 flex items-center">
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setSelectedPhoto(Math.max(0, selectedPhoto - 1))}
-                    disabled={selectedPhoto === 0}
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <div className="absolute inset-y-0 right-4 flex items-center">
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setSelectedPhoto(Math.min(filteredPhotos.length - 1, selectedPhoto + 1))}
-                    disabled={selectedPhoto === filteredPhotos.length - 1}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <div className="absolute top-4 right-4">
-                  <Button variant="secondary" size="icon" onClick={() => setSelectedPhoto(null)}>
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-6 overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Foto #{selectedPhoto + 1}</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">Calificación</label>
-                    <StarRating
-                      rating={filteredPhotos[selectedPhoto].rating}
-                      onRatingChange={(rating) => updatePhotoRating(filteredPhotos[selectedPhoto].id, rating)}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">Etiqueta de color</label>
-                    <ColorTagSelector
-                      currentTag={filteredPhotos[selectedPhoto].colorTag}
-                      onTagChange={(tag) => updatePhotoColorTag(filteredPhotos[selectedPhoto].id, tag)}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">
-                      Comentarios para el retocador
-                    </label>
-                    <Textarea
-                      placeholder="Ej: Aclarar un poco el fondo, mejorar el contraste..."
-                      value={filteredPhotos[selectedPhoto].comments}
-                      onChange={(e) => updatePhotoComment(filteredPhotos[selectedPhoto].id, e.target.value)}
-                      className="min-h-[120px]"
-                    />
-                  </div>
-
-                  <Button
-                    variant={filteredPhotos[selectedPhoto].isFavorite ? "default" : "outline"}
-                    onClick={() => toggleFavorite(filteredPhotos[selectedPhoto].id)}
-                    className="w-full gap-2"
-                  >
-                    <Heart className={`w-4 h-4 ${filteredPhotos[selectedPhoto].isFavorite ? "fill-white" : ""}`} />
-                    {filteredPhotos[selectedPhoto].isFavorite ? "Favorita" : "Marcar como favorita"}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
 
       {/* Modal de Comparación */}
       {showComparison && (

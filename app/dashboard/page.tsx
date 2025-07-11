@@ -16,6 +16,7 @@ import {
   MoreVertical,
   Bell,
   User,
+  Eye,
 } from "lucide-react"
 import { ModeToggle } from "@/components/mode-toggle"
 
@@ -107,13 +108,13 @@ export default function DashboardPage() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => router.push(`/dashboard/sessions/${session.id}`)}>
-                  Ver detalles
+                  Gestionar Sesión
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push(`/session/${session.id}`)}>
+                  Revisar Fotos
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push(`/dashboard/sessions/${session.id}/edit`)}>
                   Editar sesión
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push(`/dashboard/sessions/${session.id}/upload`)}>
-                  Subir fotos
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -154,12 +155,13 @@ export default function DashboardPage() {
         </CardContent>
         <CardFooter>
           <div className="flex justify-between items-center w-full">
-            <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/sessions/${session.id}`)}>
-              Ver detalles
+            <Button variant="outline" size="sm" onClick={() => router.push(`/session/${session.id}`)}>
+              <Eye className="h-4 w-4 mr-2" />
+              Revisar Fotos
             </Button>
-            <Button size="sm" onClick={() => router.push(`/dashboard/sessions/${session.id}/upload`)}>
+            <Button size="sm" onClick={() => router.push(`/dashboard/sessions/${session.id}`)}>
               <Upload className="h-4 w-4 mr-2" />
-              Subir fotos
+              Gestionar Sesión
             </Button>
           </div>
         </CardFooter>
