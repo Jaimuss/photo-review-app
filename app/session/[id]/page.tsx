@@ -59,6 +59,13 @@ export default function PhotoReviewSession() {
   // Estados para selección múltiple (unificada para acciones masivas y comparación)
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
   const [showBulkActions, setShowBulkActions] = useState(false)
+  
+  // Estados para selección por área con el ratón
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const [dragEnd, setDragEnd] = useState({ x: 0, y: 0 })
+  const [dragStartPhotos, setDragStartPhotos] = useState<string[]>([])
+  
   const { id: sessionId } = useParams()
 
   useEffect(() => {
@@ -243,6 +250,92 @@ export default function PhotoReviewSession() {
   const clearSelection = () => {
     setSelectedPhotos([])
     setShowBulkActions(false)
+  }
+
+  // Funciones para selección por área con el ratón
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Solo iniciar drag selection si no se hizo clic en una foto o botón
+    if ((e.target as HTMLElement).closest('[data-photo-card]') || 
+        (e.target as HTMLElement).closest('button') ||
+        (e.target as HTMLElement).closest('[role="button"]')) {
+      return
+    }
+
+    e.preventDefault()
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const startX = e.clientX - rect.left
+    const startY = e.clientY - rect.top
+
+    setIsDragging(true)
+    setDragStart({ x: startX, y: startY })
+    setDragEnd({ x: startX, y: startY })
+    
+    // Guardar selección actual para poder mantenerla con Ctrl
+    if (e.ctrlKey) {
+      setDragStartPhotos([...selectedPhotos])
+    } else {
+      setDragStartPhotos([])
+      setSelectedPhotos([]) // Clear current selection if not holding Ctrl
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return
+
+    e.preventDefault()
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const currentX = e.clientX - rect.left
+    const currentY = e.clientY - rect.top
+
+    setDragEnd({ x: currentX, y: currentY })
+
+    // Calcular qué fotos están dentro del área de selección
+    const selectionRect = {
+      left: Math.min(dragStart.x, currentX),
+      top: Math.min(dragStart.y, currentY),
+      right: Math.max(dragStart.x, currentX),
+      bottom: Math.max(dragStart.y, currentY)
+    }
+
+    const photosInSelection: string[] = []
+    const photoElements = document.querySelectorAll('[data-photo-card]')
+    
+    photoElements.forEach((element) => {
+      const photoRect = element.getBoundingClientRect()
+      const containerRect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+      
+      const elementRelativeRect = {
+        left: photoRect.left - containerRect.left,
+        top: photoRect.top - containerRect.top,
+        right: photoRect.right - containerRect.left,
+        bottom: photoRect.bottom - containerRect.top
+      }
+
+      // Check if photo intersects with selection rectangle
+      if (elementRelativeRect.left < selectionRect.right &&
+          elementRelativeRect.right > selectionRect.left &&
+          elementRelativeRect.top < selectionRect.bottom &&
+          elementRelativeRect.bottom > selectionRect.top) {
+        const photoId = element.getAttribute('data-photo-id')
+        if (photoId) {
+          photosInSelection.push(photoId)
+        }
+      }
+    })
+
+    // Combinar con selección inicial si se mantiene Ctrl
+    const finalSelection = e.ctrlKey 
+      ? [...dragStartPhotos, ...photosInSelection]
+      : photosInSelection
+
+    setSelectedPhotos([...new Set(finalSelection)]) // Remove duplicates
+  }
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging) return
+
+    setIsDragging(false)
+    // La selección final ya está establecida en handleMouseMove
   }
 
   // Efecto para cerrar acciones masivas cuando no hay fotos seleccionadas
@@ -595,7 +688,7 @@ export default function PhotoReviewSession() {
                   size="sm"
                   onClick={() => selectedPhotos.length > 0 ? clearSelection() : selectAllPhotos()}
                   className="gap-2"
-                  title={selectedPhotos.length > 0 ? "Deseleccionar todas las fotos" : "Seleccionar todas las fotos (o usa CTRL + Click)"}
+                  title={selectedPhotos.length > 0 ? "Deseleccionar todas las fotos" : "Seleccionar todas las fotos (o usa CTRL + Click o arrastra para seleccionar área)"}
                 >
                   <CheckSquare className="w-4 h-4" />
                   {selectedPhotos.length > 0 ? `Deseleccionar (${selectedPhotos.length})` : "Seleccionar todo"}
@@ -677,7 +770,7 @@ export default function PhotoReviewSession() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium">
-                  Aplicar a {selectedPhotos.length} fotos seleccionadas (CTRL + Click):
+                  Aplicar a {selectedPhotos.length} fotos seleccionadas (CTRL + Click o selección por área):
                 </span>
                 <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
                   💡 Teclas: 0-5 (rating), G/Y/R (etiquetas), F (favorita), ESC (limpiar)
@@ -796,17 +889,37 @@ export default function PhotoReviewSession() {
       <div className={`${isFullWidth ? 'w-full' : 'max-w-7xl'} mx-auto px-4 py-6`}>
         {viewMode === "grid" ? (
           <div 
-            className="grid gap-4"
+            className="grid gap-4 relative select-none"
             style={{ 
               gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` 
             }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={() => setIsDragging(false)}
           >
+            {/* Overlay de selección por área */}
+            {isDragging && (
+              <div
+                className="absolute bg-blue-500/20 border-2 border-blue-500 pointer-events-none z-10"
+                style={{
+                  left: Math.min(dragStart.x, dragEnd.x),
+                  top: Math.min(dragStart.y, dragEnd.y),
+                  width: Math.abs(dragEnd.x - dragStart.x),
+                  height: Math.abs(dragEnd.y - dragStart.y),
+                }}
+              />
+            )}
             {filteredPhotos.map((photo, index) => (
-              <Card key={photo.id} className={`group overflow-hidden hover:shadow-md transition-all ${
-                selectedPhotos.includes(photo.id) 
-                  ? 'ring-4 ring-white dark:ring-gray-300 ring-opacity-90 dark:ring-opacity-80 shadow-2xl shadow-gray-200/50 dark:shadow-gray-400/30 scale-[1.02] bg-white/80 dark:bg-gray-700/40' 
-                  : ''
-              }`}>
+              <Card 
+                key={photo.id} 
+                data-photo-card
+                data-photo-id={photo.id}
+                className={`group overflow-hidden hover:shadow-md transition-all ${
+                  selectedPhotos.includes(photo.id) 
+                    ? 'ring-4 ring-white dark:ring-gray-300 ring-opacity-90 dark:ring-opacity-80 shadow-2xl shadow-gray-200/50 dark:shadow-gray-400/30 scale-[1.02] bg-white/80 dark:bg-gray-700/40' 
+                    : ''
+                }`}>
                 <CardContent className="p-0 relative">
                   {/* Contenedor de imagen con aspect ratio fijo */}
                   <div className="aspect-[4/3] relative bg-muted/20 rounded-t-lg">
