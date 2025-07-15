@@ -21,6 +21,7 @@ import {
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LecorralHeader } from "@/components/lecorral-header"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -96,14 +97,95 @@ export default function PhotoReviewSession() {
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      if (data.type === "photo_updated") {
-        toast({
-          title: "Foto actualizada",
-          description: "El fotógrafo ha actualizado una foto en esta sesión",
-        })
-        // Recargar datos
-        loadSessionData()
+      
+      // Manejar diferentes tipos de eventos
+      switch (data.type) {
+        case "connected":
+          console.log(`Cliente conectado: ${data.clientId} para sesión ${data.sessionId}. Clientes activos: ${data.activeConnections}`)
+          break
+          
+        case "photo_rating":
+          // Actualizar solo el rating de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, rating: data.data.rating, isReviewed: true }
+              : photo
+          ))
+          console.log(`Rating actualizado en tiempo real para foto ${data.photoId}: ${data.data.rating}`)
+          toast({
+            title: "Rating actualizado",
+            description: `El fotógrafo cambió el rating a ${data.data.rating} estrellas`,
+          })
+          break
+          
+        case "photo_favorite":
+          // Actualizar solo el estado de favorito de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, isFavorite: data.data.isFavorite, isReviewed: true }
+              : photo
+          ))
+          console.log(`Favorito actualizado en tiempo real para foto ${data.photoId}: ${data.data.isFavorite}`)
+          toast({
+            title: "Favorito actualizado",
+            description: data.data.isFavorite ? "Foto marcada como favorita" : "Foto desmarcada como favorita",
+          })
+          break
+          
+        case "photo_comment":
+          // Actualizar solo el comentario de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, comments: data.data.comment, isReviewed: true }
+              : photo
+          ))
+          console.log(`Comentario actualizado en tiempo real para foto ${data.photoId}`)
+          toast({
+            title: "Comentario actualizado",
+            description: "El fotógrafo agregó un comentario",
+          })
+          break
+          
+        case "photo_color_tag":
+          // Actualizar solo la etiqueta de color de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, colorTag: data.data.colorTag, isReviewed: true }
+              : photo
+          ))
+          console.log(`Etiqueta de color actualizada en tiempo real para foto ${data.photoId}: ${data.data.colorTag}`)
+          const tagName = data.data.colorTag === "green" ? "Seleccionar" 
+            : data.data.colorTag === "yellow" ? "Revisar" 
+            : data.data.colorTag === "red" ? "Descartar" 
+            : "Sin etiqueta"
+          toast({
+            title: "Etiqueta actualizada",
+            description: `Foto marcada como: ${tagName}`,
+          })
+          break
+          
+        case "photo_updated":
+          // Evento general - recargar datos solo si es necesario
+          console.log("Foto actualizada:", data.message)
+          toast({
+            title: "Foto actualizada",
+            description: "El fotógrafo ha actualizado una foto en esta sesión",
+          })
+          // Solo recargar si no es uno de los eventos específicos anteriores
+          loadSessionData()
+          break
+          
+        default:
+          console.log("Evento recibido:", data)
       }
+    }
+
+    eventSource.onerror = (error) => {
+      console.error("Error en EventSource:", error)
+    }
+
+    eventSource.onopen = () => {
+      console.log("Conexión SSE establecida")
     }
 
     return () => {
@@ -334,9 +416,15 @@ export default function PhotoReviewSession() {
 
   // Funciones para selección por área con el ratón
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Solo bloquear si se hizo clic en un botón (permitir drag desde fotos)
-    if ((e.target as HTMLElement).closest('button') ||
-        (e.target as HTMLElement).closest('[role="button"]')) {
+    // Solo bloquear si se hizo clic específicamente en elementos de rating o botones
+    const target = e.target as HTMLElement
+    
+    // Permitir drag en imágenes, pero bloquear clicks en controles específicos
+    if (target.closest('button') ||
+        target.closest('[role="button"]') ||
+        // Solo bloquear SVGs que están dentro del componente StarRating (estrellas y X)
+        (target.tagName === 'svg' && target.classList.contains('cursor-pointer')) ||
+        (target.closest('svg') && target.closest('svg')?.classList.contains('cursor-pointer'))) {
       return
     }
 
@@ -348,14 +436,13 @@ export default function PhotoReviewSession() {
     setIsDragging(true)
     setDragStart({ x: startX, y: startY })
     setDragEnd({ x: startX, y: startY })
-    setIsCtrlHeld(e.ctrlKey) // Guardar estado del Ctrl
+    setIsCtrlHeld(e.ctrlKey)
     
-    // Guardar selección actual para poder mantenerla con Ctrl
     if (e.ctrlKey) {
       setDragStartPhotos([...selectedPhotos])
     } else {
       setDragStartPhotos([])
-      setSelectedPhotos([]) // Clear current selection if not holding Ctrl
+      setSelectedPhotos([])
     }
   }
 
@@ -503,7 +590,13 @@ export default function PhotoReviewSession() {
           break
         case 'f':
         case 'F':
-          applyBulkFavorite(true)
+          // Toggle favorito: si alguna foto no es favorita, marcar todas como favoritas
+          // Si todas son favoritas, desmarcar todas
+          const currentlyFavoritePhotos = photos.filter(photo => 
+            selectedPhotos.includes(photo.id) && photo.isFavorite
+          )
+          const shouldMarkAsFavorite = currentlyFavoritePhotos.length < selectedPhotos.length
+          applyBulkFavorite(shouldMarkAsFavorite)
           break
         case 'Escape':
           clearSelection()
@@ -513,7 +606,7 @@ export default function PhotoReviewSession() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [selectedPhotos.length, applyBulkRating, applyBulkColorTag, applyBulkFavorite, clearSelection])
+  }, [selectedPhotos.length, applyBulkRating, applyBulkColorTag, applyBulkFavorite, clearSelection, photos])
 
   // Navegación con teclado y scroll
   useEffect(() => {
@@ -607,15 +700,7 @@ export default function PhotoReviewSession() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        <header className="border-b">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Camera className="h-6 w-6" />
-              <h1 className="text-xl font-bold">Photo Review App</h1>
-            </div>
-            <ModeToggle />
-          </div>
-        </header>
+        <LecorralHeader />
 
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -630,15 +715,7 @@ export default function PhotoReviewSession() {
   if (!session) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        <header className="border-b">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Camera className="h-6 w-6" />
-              <h1 className="text-xl font-bold">Photo Review App</h1>
-            </div>
-            <ModeToggle />
-          </div>
-        </header>
+        <LecorralHeader />
 
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -655,46 +732,27 @@ export default function PhotoReviewSession() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-background border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Camera className="h-5 w-5" />
-                  <h1 className="text-xl font-bold">{session.location}</h1>
-                </div>
-                <p className="text-muted-foreground">
-                  Cliente: {session.clientName} • {session.date}
-                </p>
-              </div>
-              <div className="lg:hidden">
-                <ModeToggle />
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
-              <div className="text-left lg:text-right">
-                <p className="text-sm text-muted-foreground">Progreso de revisión</p>
-                <div className="flex items-center gap-2">
-                  <Progress value={progressPercentage} className="w-32" />
-                  <span className="text-sm font-medium">
-                    {reviewedCount}/{photos.length}
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
-                  <Download className="w-4 h-4" />
-                  Exportar Revisión
-                </Button>
-                <div className="hidden lg:block">
-                  <ModeToggle />
-                </div>
-              </div>
+      <LecorralHeader>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+          <div className="text-left lg:text-right">
+            <p className="text-sm text-muted-foreground">
+              {session.clientName} • {session.location}
+            </p>
+            <div className="flex items-center gap-2">
+              <Progress value={progressPercentage} className="w-32" />
+              <span className="text-sm font-medium">
+                {reviewedCount}/{photos.length}
+              </span>
             </div>
           </div>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
+              <Download className="w-4 h-4" />
+              Exportar Revisión
+            </Button>
+          </div>
         </div>
-      </div>
+      </LecorralHeader>
 
       {/* Controls */}
       <div className="bg-background border-b">
@@ -980,7 +1038,6 @@ export default function PhotoReviewSession() {
 
                     {/* Indicadores sutiles */}
                     <div className="absolute top-2 right-2 flex gap-1">
-                      {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
                       {photo.colorTag && (
                         <div
                           className={`w-5 h-5 rounded-full ${colorTags.find((t) => t.value === photo.colorTag)?.color}`}
@@ -1079,6 +1136,31 @@ export default function PhotoReviewSession() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Botón Finalizar (cliente) */}
+      <div className="flex justify-end max-w-6xl mx-auto px-4 pb-10">
+        <Button
+          variant="default"
+          onClick={() => {
+            fetch('/api/report-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ sessionId, photos }),
+            }).then(async (res) => {
+              if (res.ok) {
+                toast({ title: 'Enviado', description: 'Se ha enviado tu selección al fotógrafo.' })
+              } else {
+                const { error } = await res.json()
+                toast({ title: 'Error', description: error || 'No se pudo enviar el correo', variant: 'destructive' })
+              }
+            }).catch(() => {
+              toast({ title: 'Error', description: 'No se pudo contactar con el servidor', variant: 'destructive' })
+            })
+          }}
+        >
+          Finalizar y enviar
+        </Button>
       </div>
 
       {/* Modal para vista individual */}

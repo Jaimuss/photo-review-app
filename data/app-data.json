@@ -1642,90 +1642,110 @@
     "review-photo-session-1752228283162-1752228295570-0": {
       "id": "review-photo-session-1752228283162-1752228295570-0",
       "photoId": "photo-session-1752228283162-1752228295570-0",
-      "rating": 5,
-      "updatedAt": 1752239260611,
-      "isReviewed": true
+      "rating": 4,
+      "updatedAt": 1752507569579,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-1": {
       "id": "review-photo-session-1752228283162-1752228295570-1",
       "photoId": "photo-session-1752228283162-1752228295570-1",
-      "rating": 5,
-      "updatedAt": 1752241112047,
+      "rating": 1,
+      "updatedAt": 1752570717743,
       "isReviewed": true,
-      "colorTag": null
+      "colorTag": null,
+      "isFavorite": false
     },
     "review-photo-session-1752228283162-1752228295570-2": {
       "id": "review-photo-session-1752228283162-1752228295570-2",
       "photoId": "photo-session-1752228283162-1752228295570-2",
-      "rating": 5,
-      "updatedAt": 1752241112049,
+      "rating": 4,
+      "updatedAt": 1752570717750,
       "isReviewed": true,
-      "colorTag": null
+      "colorTag": null,
+      "isFavorite": false
     },
     "review-photo-session-1752228283162-1752228295570-3": {
       "id": "review-photo-session-1752228283162-1752228295570-3",
       "photoId": "photo-session-1752228283162-1752228295570-3",
-      "rating": 3,
-      "updatedAt": 1752239519563,
-      "isReviewed": true
+      "rating": 0,
+      "updatedAt": 1752507563161,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-4": {
       "id": "review-photo-session-1752228283162-1752228295570-4",
       "photoId": "photo-session-1752228283162-1752228295570-4",
-      "rating": 5,
-      "updatedAt": 1752239260610,
-      "isReviewed": true
+      "rating": 0,
+      "updatedAt": 1752507120495,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-5": {
       "id": "review-photo-session-1752228283162-1752228295570-5",
       "photoId": "photo-session-1752228283162-1752228295570-5",
-      "rating": 5,
-      "updatedAt": 1752241990523,
+      "rating": 2,
+      "updatedAt": 1752570717750,
       "isReviewed": true,
-      "colorTag": null
+      "colorTag": null,
+      "isFavorite": false
     },
     "review-photo-session-1752228283162-1752228295570-6": {
       "id": "review-photo-session-1752228283162-1752228295570-6",
       "photoId": "photo-session-1752228283162-1752228295570-6",
       "rating": 5,
-      "updatedAt": 1752241990522,
+      "updatedAt": 1752570717751,
       "isReviewed": true,
-      "colorTag": null
+      "colorTag": null,
+      "isFavorite": false
     },
     "review-photo-session-1752228283162-1752228295570-7": {
       "id": "review-photo-session-1752228283162-1752228295570-7",
       "photoId": "photo-session-1752228283162-1752228295570-7",
       "rating": 5,
-      "updatedAt": 1752241990513,
-      "isReviewed": true
+      "updatedAt": 1752507574356,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-8": {
       "id": "review-photo-session-1752228283162-1752228295570-8",
       "photoId": "photo-session-1752228283162-1752228295570-8",
-      "rating": 5,
-      "updatedAt": 1752239260776,
-      "isReviewed": true
+      "rating": 2,
+      "updatedAt": 1752503627912,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-9": {
       "id": "review-photo-session-1752228283162-1752228295570-9",
       "photoId": "photo-session-1752228283162-1752228295570-9",
       "rating": 5,
-      "updatedAt": 1752239260776,
-      "isReviewed": true
+      "updatedAt": 1752507588730,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-10": {
       "id": "review-photo-session-1752228283162-1752228295570-10",
       "photoId": "photo-session-1752228283162-1752228295570-10",
-      "rating": 5,
-      "updatedAt": 1752239260802,
-      "isReviewed": true
+      "rating": 2,
+      "updatedAt": 1752503627969,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-11": {
       "id": "review-photo-session-1752228283162-1752228295570-11",
       "photoId": "photo-session-1752228283162-1752228295570-11",
-      "rating": 5,
-      "updatedAt": 1752239260821,
-      "isReviewed": true
+      "rating": 2,
+      "updatedAt": 1752503627976,
+      "isReviewed": true,
+      "isFavorite": false,
+      "colorTag": null
     },
     "review-photo-session-1752228283162-1752228295570-12": {
       "id": "review-photo-session-1752228283162-1752228295570-12",
@@ -1813,8 +1833,9 @@
     "review-photo-session-1752228546456-1752228591070-1": {
       "id": "review-photo-session-1752228546456-1752228591070-1",
       "photoId": "photo-session-1752228546456-1752228591070-1",
-      "rating": 3,
-      "updatedAt": 1752228591772
+      "rating": 5,
+      "updatedAt": 1752489443627,
+      "isReviewed": true
     },
     "review-photo-session-1752228546456-1752228591070-2": {
       "id": "review-photo-session-1752228546456-1752228591070-2",
@@ -1843,8 +1864,9 @@
     "review-photo-session-1752228546456-1752228591070-6": {
       "id": "review-photo-session-1752228546456-1752228591070-6",
       "photoId": "photo-session-1752228546456-1752228591070-6",
-      "rating": 3,
-      "updatedAt": 1752228594111
+      "rating": 5,
+      "updatedAt": 1752489443638,
+      "isReviewed": true
     },
     "review-photo-session-1752228283162-1752235237505-0": {
       "id": "review-photo-session-1752228283162-1752235237505-0",

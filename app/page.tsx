@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/components/ui/use-toast"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LecorralHeader } from "@/components/lecorral-header"
 
 // Types
 interface Photo {
@@ -354,22 +355,14 @@ export default function PhotoReviewSession() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Camera className="h-6 w-6" />
-            <h1 className="text-xl font-bold">Photo Review App</h1>
-          </div>
-          <ModeToggle />
-        </div>
-      </header>
+      <LecorralHeader />
 
       <main className="flex-1 container mx-auto py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Plataforma de Revisión de Fotografías</h1>
+            <h1 className="text-4xl font-bold mb-4">LECORRAL PICKER</h1>
             <p className="text-xl text-muted-foreground">
-              Revisa, califica y selecciona tus fotos favoritas de manera sencilla e interactiva
+              Plataforma profesional para selección y revisión de fotografías
             </p>
           </div>
 
@@ -459,7 +452,7 @@ export default function PhotoReviewSession() {
 
       <footer className="border-t py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Photo Review App. Todos los derechos reservados.
+          &copy; {new Date().getFullYear()} LECORRAL PICKER. Todos los derechos reservados.
         </div>
       </footer>
     </div>

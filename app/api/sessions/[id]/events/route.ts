@@ -1,4 +1,8 @@
 import type { NextRequest } from "next/server"
+import { eventManager } from "@/lib/event-manager"
+
+// Fuerza este handler a ejecutarse en Node.js (no Edge) para que `params` sea síncrono  
+export const runtime = "nodejs"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: sessionId } = await params
@@ -6,37 +10,40 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   // Configurar Server-Sent Events
   const stream = new ReadableStream({
     start(controller) {
-      // Enviar evento inicial
-      const data = JSON.stringify({
+      // Registrar esta conexión en el EventManager
+      const clientId = eventManager.addConnection(sessionId, controller)
+
+      // Enviar evento inicial de conexión
+      const connectionData = JSON.stringify({
         type: "connected",
         sessionId,
+        clientId,
+        activeConnections: eventManager.getSessionConnectionCount(sessionId),
         timestamp: new Date().toISOString(),
       })
 
-      controller.enqueue(`data: ${data}\n\n`)
-
-      // Simular eventos periódicos (en producción serían eventos reales)
-      const interval = setInterval(() => {
-        const eventData = JSON.stringify({
-          type: "photo_updated",
-          sessionId,
-          message: "Una foto ha sido actualizada",
-          timestamp: new Date().toISOString(),
-        })
-
-        try {
-          controller.enqueue(`data: ${eventData}\n\n`)
-        } catch (error) {
-          clearInterval(interval)
-          controller.close()
-        }
-      }, 30000) // Cada 30 segundos
+      controller.enqueue(`data: ${connectionData}\n\n`)
 
       // Limpiar cuando se cierre la conexión
       request.signal.addEventListener("abort", () => {
-        clearInterval(interval)
-        controller.close()
+        eventManager.removeConnection(clientId)
       })
+
+      // También limpiar si el stream se cierra inesperadamente
+      const cleanup = () => {
+        eventManager.removeConnection(clientId)
+      }
+
+      // Detectar cierre del controlador
+      try {
+        const originalClose = controller.close.bind(controller)
+        controller.close = () => {
+          cleanup()
+          return originalClose()
+        }
+      } catch (error) {
+        // Si no se puede sobrescribir close, usar el cleanup en abort
+      }
     },
   })
 

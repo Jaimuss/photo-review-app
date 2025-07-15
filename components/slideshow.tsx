@@ -35,12 +35,22 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
   const [showControls, setShowControls] = useState(true)
   const [editingComment, setEditingComment] = useState(false)
   const [tempComment, setTempComment] = useState('')
-  const intervalRef = useRef<NodeJS.Timeout>()
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Agregar estados para zoom
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 }) // Porcentajes
 
   useEffect(() => {
     setCurrentIndex(startIndex)
   }, [startIndex])
+
+  // Resetear zoom al cambiar de foto
+  useEffect(() => {
+    setZoomLevel(1)
+    setZoomPosition({ x: 50, y: 50 })
+  }, [currentIndex])
 
   useEffect(() => {
     if (isPlaying && photos.length > 1) {
@@ -238,6 +248,22 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
     }
   }, [isOpen, isPlaying, editingComment, currentIndex])
 
+  // Función para manejar wheel event
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const delta = e.deltaY < 0 ? 0.2 : -0.2 // Sensibilidad uniforme
+    const newZoom = Math.max(1, Math.min(3, zoomLevel + delta))
+    setZoomLevel(newZoom)
+    
+    // Calcular posición del mouse relativa a la imagen
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    setZoomPosition({ x, y })
+  }
+
+  // Ya no necesitamos agregar listeners manualmente; usaremos la prop onWheel directamente.
+
   if (!isOpen || photos.length === 0) return null
 
   // Validar que currentIndex esté dentro del rango válido
@@ -265,16 +291,19 @@ export function Slideshow({ photos, isOpen, onClose, startIndex = 0, onUpdatePho
         <div 
           className="relative w-screen h-screen flex items-center justify-center"
           onMouseMove={handleMouseMove}
+          onWheel={handleWheel}
         >
           {/* Imagen principal */}
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full image-container overflow-hidden">
             <Image
               src={currentPhoto.url || "/placeholder.svg"}
               alt={`Foto ${validIndex + 1}`}
               fill
-              className={`object-contain transition-opacity duration-500 ${
-                transition === 'fade' ? 'opacity-100' : ''
-              }`}
+              className={`object-contain transition-all duration-200`}
+              style={{
+                transform: `scale(${zoomLevel})`,
+                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`
+              }}
               priority
             />
           </div>

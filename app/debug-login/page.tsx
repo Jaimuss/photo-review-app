@@ -71,7 +71,7 @@ export default function DebugLogin() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Debug Sistema de Login</h1>
+        <h1 className="text-2xl font-bold mb-6">LECORRAL PICKER - Debug Sistema de Login</h1>
         
         <div className="space-y-4 mb-8">
           <button 

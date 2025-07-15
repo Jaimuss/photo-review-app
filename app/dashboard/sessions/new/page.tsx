@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Camera, ArrowLeft, Calendar } from "lucide-react"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LecorralHeader } from "@/components/lecorral-header"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -85,15 +86,7 @@ export default function NewSessionPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Camera className="h-6 w-6" />
-            <h1 className="text-xl font-bold">Photo Review App</h1>
-          </div>
-          <ModeToggle />
-        </div>
-      </header>
+      <LecorralHeader />
 
       <main className="container mx-auto py-8 px-4">
         <div className="max-w-2xl mx-auto">

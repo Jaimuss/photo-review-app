@@ -1,6 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { database } from "@/lib/database"
 
+// Fuerza este handler a ejecutarse en Node.js (no Edge) para que `params` sea síncrono
+export const runtime = "nodejs"
+
+// En Next.js 15, params es siempre una Promise
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: sessionId } = await params

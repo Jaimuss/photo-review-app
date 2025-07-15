@@ -78,7 +78,7 @@ class JSONStorage {
       demoReviews[`review-${photoId}`] = {
         id: `review-${photoId}`,
         photoId: photoId,
-        rating: i % 6, // 0-5 estrellas, base 0
+        rating: (i % 5) + 1, // 1-5 estrellas, base 1
         colorTag: i % 4 === 0 ? 'green' : i % 4 === 1 ? 'yellow' : i % 4 === 2 ? 'red' : null,
         comment: i % 6 === 0 ? 'Me encanta esta foto, perfecta para imprimir' : '',
         isFavorite: i % 7 === 0,
@@ -143,7 +143,7 @@ class JSONStorage {
         filename: photo.filename,
         url: photo.originalUrl,
         uploadOrder: photo.uploadOrder,
-        rating: review.rating ?? 0, // Base 0 estrellas
+        rating: review.rating ?? 3, // Base 1 estrellas (1-5), default 3
         colorTag: review.colorTag || null,
         comments: review.comment || '',
         isFavorite: review.isFavorite || false,
@@ -189,11 +189,11 @@ class JSONStorage {
       createdAt: Date.now()
     }
     
-    // Crear review inicial con 0 estrellas
+    // Crear review inicial con 3 estrellas
     this.data.photoReviews[`review-${data.id}`] = {
       id: `review-${data.id}`,
       photoId: data.id,
-      rating: 0, // Rating base 0 estrellas
+      rating: 3, // Rating base 1 estrellas (1-5), default 3
       updatedAt: Date.now()
     }
     
@@ -252,6 +252,17 @@ class JSONStorage {
       createdAt: Date.now()
     }
     this.saveData()
+  }
+
+  // Método para obtener una foto por ID
+  async getPhotoById(photoId: string) {
+    return this.data.photos[photoId] || null
+  }
+
+  // Método para obtener sessionId a partir de photoId
+  async getSessionIdByPhotoId(photoId: string): Promise<string | null> {
+    const photo = this.data.photos[photoId]
+    return photo?.sessionId || null
   }
 }
 

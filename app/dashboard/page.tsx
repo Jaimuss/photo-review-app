@@ -19,6 +19,8 @@ import {
   Eye,
 } from "lucide-react"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LecorralHeader } from "@/components/lecorral-header"
+import { LecorralLogo } from "@/components/lecorral-logo"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -174,8 +176,8 @@ export default function DashboardPage() {
       {/* Sidebar */}
       <div className="w-64 border-r hidden md:block p-4">
         <div className="flex items-center gap-2 mb-8">
-          <Camera className="h-6 w-6" />
-          <h1 className="text-xl font-bold">Photo Review</h1>
+          <LecorralLogo size="sm" />
+          <h1 className="text-xl font-bold">LECORRAL PICKER</h1>
         </div>
 
         <nav className="space-y-1">
@@ -224,7 +226,7 @@ export default function DashboardPage() {
         {/* Header */}
         <header className="border-b">
           <div className="container py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold md:hidden">Photo Review</h1>
+            <h1 className="text-2xl font-bold md:hidden">LECORRAL PICKER</h1>
             <div className="flex items-center gap-4">
               <div className="relative w-full max-w-sm">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

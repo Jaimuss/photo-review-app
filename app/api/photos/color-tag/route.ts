@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { database } from "@/lib/database"
+import { sendPhotoColorTagEvent } from "@/lib/event-manager"
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,10 +16,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid color tag" }, { status: 400 })
     }
 
+    // Obtener sessionId para el evento
+    const sessionId = await database.getSessionIdByPhotoId(photoId)
+    if (!sessionId) {
+      return NextResponse.json({ error: "Photo not found" }, { status: 404 })
+    }
+
     // Actualizar en base de datos local
     await database.updatePhotoReview(photoId, { colorTag, isReviewed: true })
 
-    console.log(`Updated color tag for photo ${photoId}: ${colorTag}`)
+    // Enviar evento en tiempo real a todos los clientes de la sesión
+    sendPhotoColorTagEvent(sessionId, photoId, colorTag)
+
+    console.log(`Updated color tag for photo ${photoId}: ${colorTag} - Event sent to session ${sessionId}`)
 
     return NextResponse.json({
       success: true,

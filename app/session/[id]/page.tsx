@@ -30,6 +30,7 @@ import { PhotoComparison } from "@/components/photo-comparison"
 import { Slideshow } from "@/components/slideshow"
 import { ExportDialog } from "@/components/export-dialog"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LecorralHeader } from "@/components/lecorral-header"
 
 // Mock data - now loaded from API
 // const sessionData = { ... }
@@ -66,6 +67,7 @@ export default function PhotoReviewSession() {
   const [dragEnd, setDragEnd] = useState({ x: 0, y: 0 })
   const [dragStartPhotos, setDragStartPhotos] = useState<string[]>([])
   const [isCtrlHeld, setIsCtrlHeld] = useState(false)
+  const [wasDragging, setWasDragging] = useState(false)
   
   const { id: sessionId } = useParams()
 
@@ -77,11 +79,62 @@ export default function PhotoReviewSession() {
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      if (data.type === "photo_updated") {
-        // En una app real mostrarías una notificación
-        console.log("Foto actualizada:", data.message)
-        // Recargar datos
-        loadSessionData()
+      
+      // Manejar diferentes tipos de eventos
+      switch (data.type) {
+        case "connected":
+          console.log(`Conectado a sesión ${data.sessionId}. Clientes activos: ${data.activeConnections}`)
+          break
+          
+        case "photo_rating":
+          // Actualizar solo el rating de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, rating: data.data.rating, isReviewed: true }
+              : photo
+          ))
+          console.log(`Rating actualizado en tiempo real para foto ${data.photoId}: ${data.data.rating}`)
+          break
+          
+        case "photo_favorite":
+          // Actualizar solo el estado de favorito de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, isFavorite: data.data.isFavorite, isReviewed: true }
+              : photo
+          ))
+          console.log(`Favorito actualizado en tiempo real para foto ${data.photoId}: ${data.data.isFavorite}`)
+          break
+          
+        case "photo_comment":
+          // Actualizar solo el comentario de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, comments: data.data.comment, isReviewed: true }
+              : photo
+          ))
+          console.log(`Comentario actualizado en tiempo real para foto ${data.photoId}`)
+          break
+          
+        case "photo_color_tag":
+          // Actualizar solo la etiqueta de color de la foto específica
+          setPhotos(prev => prev.map(photo => 
+            photo.id === data.photoId 
+              ? { ...photo, colorTag: data.data.colorTag, isReviewed: true }
+              : photo
+          ))
+          console.log(`Etiqueta de color actualizada en tiempo real para foto ${data.photoId}: ${data.data.colorTag}`)
+          break
+          
+        case "photo_updated":
+          // Evento general - recargar datos solo si es necesario
+          console.log("Foto actualizada:", data.message)
+          // Solo recargar si no es uno de los eventos específicos anteriores
+          loadSessionData()
+          break
+          
+        default:
+          console.log("Evento recibido:", data)
       }
     }
 
@@ -255,9 +308,15 @@ export default function PhotoReviewSession() {
 
   // Funciones para selección por área con el ratón
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Solo bloquear si se hizo clic en un botón (permitir drag desde fotos)
-    if ((e.target as HTMLElement).closest('button') ||
-        (e.target as HTMLElement).closest('[role="button"]')) {
+    // Solo bloquear si se hizo clic específicamente en elementos de rating o botones
+    const target = e.target as HTMLElement
+    
+    // Permitir drag en imágenes, pero bloquear clicks en controles específicos
+    if (target.closest('button') ||
+        target.closest('[role="button"]') ||
+        // Solo bloquear SVGs que están dentro del componente StarRating (estrellas y X)
+        (target.tagName === 'svg' && target.classList.contains('cursor-pointer')) ||
+        (target.closest('svg') && target.closest('svg')?.classList.contains('cursor-pointer'))) {
       return
     }
 
@@ -337,7 +396,19 @@ export default function PhotoReviewSession() {
 
     setIsDragging(false)
     setIsCtrlHeld(false) // Limpiar estado del Ctrl
-    // La selección final ya está establecida en handleMouseMove
+
+    // Calcular desplazamiento para decidir si realmente hubo drag
+    const dragDelta = Math.max(
+      Math.abs(dragEnd.x - dragStart.x),
+      Math.abs(dragEnd.y - dragStart.y)
+    )
+    const didDrag = dragDelta > 5 // Umbral de 5px
+
+    setWasDragging(didDrag)
+    // Si hubo drag significativo, resetear wasDragging tras breve delay
+    if (didDrag) {
+      setTimeout(() => setWasDragging(false), 100)
+    }
   }
 
   // Efecto para cerrar acciones masivas cuando no hay fotos seleccionadas
@@ -494,7 +565,13 @@ export default function PhotoReviewSession() {
           break
         case 'f':
         case 'F':
-          applyBulkFavorite(true)
+          // Toggle favorito: si alguna foto no es favorita, marcar todas como favoritas
+          // Si todas son favoritas, desmarcar todas
+          const currentlyFavoritePhotos = photos.filter(photo => 
+            selectedPhotos.includes(photo.id) && photo.isFavorite
+          )
+          const shouldMarkAsFavorite = currentlyFavoritePhotos.length < selectedPhotos.length
+          applyBulkFavorite(shouldMarkAsFavorite)
           break
         case 'Escape':
           clearSelection()
@@ -504,7 +581,7 @@ export default function PhotoReviewSession() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [selectedPhotos.length, applyBulkRating, applyBulkColorTag, applyBulkFavorite, clearSelection])
+  }, [selectedPhotos.length, applyBulkRating, applyBulkColorTag, applyBulkFavorite, clearSelection, photos])
 
   const filteredPhotos = photos.filter((photo) => {
     if (filterRating !== "all" && photo.rating !== Number.parseInt(filterRating)) return false
@@ -578,45 +655,27 @@ export default function PhotoReviewSession() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-background border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold">
-                  {sessionData?.location || 'Sesión fotográfica'}
-                </h1>
-                <p className="text-muted-foreground">
-                  Cliente: {sessionData?.clientName || 'Cliente'} • {sessionData?.date || 'Fecha'}
-                </p>
-              </div>
-              <div className="lg:hidden">
-                <ModeToggle />
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
-              <div className="text-left lg:text-right">
-                <p className="text-sm text-muted-foreground">Progreso de revisión</p>
-                <div className="flex items-center gap-2">
-                  <Progress value={progressPercentage} className="w-32" />
-                  <span className="text-sm font-medium">
-                    {reviewedCount}/{photos.length}
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
-                  <Download className="w-4 h-4" />
-                  Exportar Revisión
-                </Button>
-                <div className="hidden lg:block">
-                  <ModeToggle />
-                </div>
-              </div>
+      <LecorralHeader>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+          <div className="text-left lg:text-right">
+            <p className="text-sm text-muted-foreground">
+              {sessionData?.clientName || 'Cliente'} • {sessionData?.location || 'Sesión'}
+            </p>
+            <div className="flex items-center gap-2">
+              <Progress value={progressPercentage} className="w-32" />
+              <span className="text-sm font-medium">
+                {reviewedCount}/{photos.length}
+              </span>
             </div>
           </div>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => setShowExportDialog(true)}>
+              <Download className="w-4 h-4" />
+              Exportar Revisión
+            </Button>
+          </div>
         </div>
-      </div>
+      </LecorralHeader>
 
       {/* Controls */}
       <div className="bg-background border-b">
@@ -928,26 +987,28 @@ export default function PhotoReviewSession() {
                       fill
                       className="object-contain cursor-pointer"
                       onMouseDown={(e) => {
-                        if (e.ctrlKey) {
-                          // CTRL + Click para selección múltiple - evitar propagación
-                          e.stopPropagation();
-                          e.preventDefault();
-                          togglePhotoSelection(photo.id);
-                        }
-                        // Para drag selection, dejamos que se propague al grid
+                        // No hacer nada aquí, dejar que propague al grid
                       }}
                       onClick={(e) => {
-                        // Solo abrir slideshow si no se está dragging y no es CTRL+click
-                        if (!isDragging && !e.ctrlKey) {
-                          setSelectedPhoto(index);
-                          setShowSlideshow(true);
+                        if (wasDragging) {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          return
+                        }
+                        
+                        if (e.ctrlKey) {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          togglePhotoSelection(photo.id)
+                        } else {
+                          setSelectedPhoto(index)
+                          setShowSlideshow(true)
                         }
                       }}
                     />
 
                     {/* Indicadores sutiles */}
                     <div className="absolute top-2 right-2 flex gap-1">
-                      {photo.isFavorite && <Heart className="w-5 h-5 fill-red-500 text-red-500" />}
                       {photo.colorTag && (
                         <div
                           className={`w-5 h-5 rounded-full ${colorTags.find((t) => t.value === photo.colorTag)?.color}`}
@@ -1095,7 +1156,7 @@ export default function PhotoReviewSession() {
         photos={filteredPhotos.map(photo => ({
           id: photo.id,
           url: photo.url,
-          rating: photo.rating || 0, // Rating base 0 estrellas
+          rating: photo.rating || 3, // Rating base 1 estrellas (1-5), default 3
           isFavorite: photo.isFavorite || false,
           colorTag: photo.colorTag,
           comments: photo.comments
@@ -1133,6 +1194,37 @@ export default function PhotoReviewSession() {
           isReviewed: photo.isReviewed
         }))}
       />
+
+      {/* Botón Finalizar: copia reporte al portapapeles */}
+      <div className="flex justify-end max-w-7xl mx-auto px-4 pb-10">
+        <Button
+          variant="default"
+          onClick={() => {
+            // Construir lista de nombres separados por espacios
+            const filenames = photos.map(p => p.filename || p.id).join(' ')
+
+            // Construir tabla HTML
+            const rows = photos.map(p => {
+              const fav = p.isFavorite ? 'Sí' : 'No'
+              const tag = p.colorTag || '-'
+              const comments = (p.comments || '').replace(/\n/g, '<br/>').replace(/"/g, '&quot;')
+              return `<tr><td>${p.filename || p.id}</td><td>${p.rating}</td><td>${tag}</td><td>${fav}</td><td>${comments}</td></tr>`
+            }).join('\n')
+
+            const table = `<table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Nombre</th><th>Rating</th><th>Etiqueta</th><th>Favorita</th><th>Comentarios</th></tr></thead><tbody>${rows}</tbody></table>`
+
+            const report = `${filenames}\n\n${table}`
+
+            navigator.clipboard.writeText(report).then(() => {
+              alert('Reporte copiado al portapapeles')
+            }).catch(() => {
+              alert('No se pudo copiar el reporte')
+            })
+          }}
+        >
+          Finalizar (copiar reporte)
+        </Button>
+      </div>
     </div>
   )
 }

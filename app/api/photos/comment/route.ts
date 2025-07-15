@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { database } from "@/lib/database"
+import { sendPhotoCommentEvent } from "@/lib/event-manager"
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,10 +11,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid photoId" }, { status: 400 })
     }
 
+    // Obtener sessionId para el evento
+    const sessionId = await database.getSessionIdByPhotoId(photoId)
+    if (!sessionId) {
+      return NextResponse.json({ error: "Photo not found" }, { status: 404 })
+    }
+
     // Actualizar en base de datos local
     await database.updatePhotoReview(photoId, { comment, isReviewed: true })
 
-    console.log(`Updated comment for photo ${photoId}: ${comment}`)
+    // Enviar evento en tiempo real a todos los clientes de la sesión
+    sendPhotoCommentEvent(sessionId, photoId, comment)
+
+    console.log(`Updated comment for photo ${photoId}: ${comment} - Event sent to session ${sessionId}`)
 
     return NextResponse.json({
       success: true,

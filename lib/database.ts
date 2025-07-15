@@ -61,6 +61,11 @@ export class DatabaseService {
     return jsonStorage.createSession(data)
   }
 
+  // Método para obtener sessionId a partir de photoId
+  async getSessionIdByPhotoId(photoId: string): Promise<string | null> {
+    return jsonStorage.getSessionIdByPhotoId(photoId)
+  }
+
 }
 
 export const database = new DatabaseService()

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { UploadZone } from '@/components/upload-zone'
 import { ModeToggle } from '@/components/mode-toggle'
+import { LecorralHeader } from '@/components/lecorral-header'
 import { useToast } from '@/components/ui/use-toast'
 
 interface SessionData {
@@ -82,15 +83,7 @@ export default function UploadPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <header className="border-b">
-          <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Camera className="h-6 w-6" />
-              <h1 className="text-xl font-bold">Photo Review App</h1>
-            </div>
-            <ModeToggle />
-          </div>
-        </header>
+        <LecorralHeader />
         <main className="container mx-auto py-8 px-4">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -105,15 +98,7 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Camera className="h-6 w-6" />
-            <h1 className="text-xl font-bold">Photo Review App</h1>
-          </div>
-          <ModeToggle />
-        </div>
-      </header>
+      <LecorralHeader />
 
       <main className="container mx-auto py-8 px-4">
         <div className="max-w-4xl mx-auto">
